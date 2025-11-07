@@ -2,7 +2,7 @@
 from pathlib import Path
 import os
 from django.utils.translation import gettext_lazy as _
-
+from decouple import config
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -25,13 +25,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'modeltranslation',
-    'apps.accounts',
     'apps.cart',
     'apps.core',
     'apps.orders',
     'apps.shop',
     'widget_tweaks',
     "rosetta",
+    'apps.accounts.apps.AccountsConfig',
+
 
     'django.contrib.sites',
     'allauth',
@@ -44,7 +45,7 @@ INSTALLED_APPS = [
 
 ]
 
-from decouple import config
+
 
 SOCIALACCOUNT_PROVIDERS = {
     "openid_connect": {
@@ -115,7 +116,7 @@ LOGOUT_REDIRECT_URL = '/'
 SOCIALACCOUNT_LOGIN_ON_GET = True
 
 
-AUTH_USER_MODEL = 'accounts.CustomUser'
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 WSGI_APPLICATION = 'dj_b_ecomm_project.wsgi.application'
 
@@ -194,3 +195,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = config('GMAIL_ADDRESS')         # e.g. 'youremail@gmail.com'
+EMAIL_HOST_PASSWORD = config('GMAIL_APP_PASSWORD')# the 16-char App Password
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+SITE_URL = "http://127.0.0.1:8000"

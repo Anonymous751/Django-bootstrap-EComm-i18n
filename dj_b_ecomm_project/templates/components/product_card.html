@@ -4,7 +4,7 @@
   <div class="card-img-container" style="height: 200px; overflow: hidden;">
     <img
       src="{{ product.images.url }}"
-      class="card-img-top w-100 h-100"
+      class="card-img-top w-100 h-100 zoomSrc"
       alt="{{ product.name }}"
       style="object-fit: contain;"
     />
@@ -24,50 +24,91 @@
 {% block extra_css %}
 
 <style>
-  /* 🎨 Stylish Add to Cart Button */
-  .add-to-cart-btn {
-    background: linear-gradient(135deg, #083a4f, #00a8b5);
-    color: #fff;
-    border: none;
-    padding: 0.6rem 1.4rem;
-    border-radius: 50px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    letter-spacing: 0.3px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(8, 58, 79, 0.25);
-  }
+/* =================== ADD TO CART BUTTON VARIABLES =================== */
+:root {
+  --addcart-bg-start: #083a4f;
+  --addcart-bg-end: #00a8b5;
+  --addcart-text: #ffffff;
+  --addcart-shadow: rgba(8, 58, 79, 0.25);
+  --addcart-hover-start: #00a8b5;
+  --addcart-hover-end: #083a4f;
+  --addcart-hover-shadow: rgba(8, 58, 79, 0.4);
+  --addcart-glow-from: rgba(0, 168, 181, 0.4);
+  --addcart-glow-to: rgba(0, 168, 181, 0.7);
+  --product-name-color: #1b1b1b;  /* dark text in light mode */
+  --product-price-color: #1b1b1b;
+}
 
-  .add-to-cart-btn:hover {
-    background: linear-gradient(135deg, #00a8b5, #083a4f);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(8, 58, 79, 0.4);
-  }
+[data-theme="dark"] {
+  --addcart-bg-start: #375a7f;
+  --addcart-bg-end: #00c9ff;
+  --addcart-text: #ffffff;
+  --addcart-shadow: rgba(0, 0, 0, 0.4);
+  --addcart-hover-start: #00c9ff;
+  --addcart-hover-end: #375a7f;
+  --addcart-hover-shadow: rgba(0, 0, 0, 0.6);
+  --addcart-glow-from: rgba(0, 201, 255, 0.4);
+  --addcart-glow-to: rgba(0, 201, 255, 0.7);
+  --product-name-color: #ffffff;  /* bright text in dark mode */
+  --product-price-color: #e9eef7;
+}
 
-  .add-to-cart-btn:active {
-    transform: scale(0.96);
-    box-shadow: 0 3px 8px rgba(8, 58, 79, 0.3);
-  }
+/* 🎨 Stylish Add to Cart Button */
+.add-to-cart-btn {
+  background: linear-gradient(135deg, var(--addcart-bg-start), var(--addcart-bg-end));
+  color: var(--addcart-text);
+  border: none;
+  padding: 0.6rem 1.4rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px var(--addcart-shadow);
+}
 
-  .add-to-cart-btn i {
-    font-size: 1rem;
-  }
+.add-to-cart-btn:hover {
+  background: linear-gradient(135deg, var(--addcart-hover-start), var(--addcart-hover-end));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px var(--addcart-hover-shadow);
+  animation: pulseGlow 1s infinite alternate;
+}
 
-  /* 🌟 Subtle Glow Animation on Hover */
-  .add-to-cart-btn:hover {
-    animation: pulseGlow 1s infinite alternate;
-  }
+.add-to-cart-btn:active {
+  transform: scale(0.96);
+  box-shadow: 0 3px 8px var(--addcart-shadow);
+}
 
-  @keyframes pulseGlow {
-    from {
-      box-shadow: 0 0 8px rgba(0, 168, 181, 0.4);
-    }
-    to {
-      box-shadow: 0 0 16px rgba(0, 168, 181, 0.7);
-    }
+.add-to-cart-btn i {
+  font-size: 1rem;
+}
+
+.swiper-slide .card .card-title,
+.card-body .card-title {
+  color: var(--product-name-color);
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.swiper-slide .card .card-text,
+.card-body .card-text {
+  color: var(--product-price-color);
+  font-weight: 700;
+  transition: color 0.3s ease;
+}
+
+/* 🌟 Subtle Glow Animation on Hover */
+@keyframes pulseGlow {
+  from {
+    box-shadow: 0 0 8px var(--addcart-glow-from);
   }
+  to {
+    box-shadow: 0 0 16px var(--addcart-glow-to);
+  }
+}
+
 </style>
 {% endblock  %}

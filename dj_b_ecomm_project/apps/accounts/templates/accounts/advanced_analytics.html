@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Advanced Analytics / ShopEase{% endblock title %}
+
+{% block content %}
+<style>
+ /* =================== THEME VARIABLES =================== */
+:root {
+  /* Page background */
+  --body-bg: linear-gradient(135deg, #f4f9ff, #e6f0ff);
+  --text-color: #083a4f;
+
+  /* Card */
+  --card-bg: #ffffff;
+  --card-border-radius: 16px;
+  --card-box-shadow: 0 10px 25px rgba(8, 58, 79, 0.15);
+  --card-hover-transform: translateY(-6px);
+
+  /* Canvas */
+  --canvas-min-height: 280px;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] {
+  --body-bg: linear-gradient(135deg, #0b1527, #1a1f36);
+  --text-color: #ffffff;
+  --card-bg: rgba(10, 15, 25, 0.95);
+  --card-box-shadow: 0 10px 25px rgba(255, 255, 255, 0.05);
+}
+
+/* =================== BODY =================== */
+body {
+  background: var(--body-bg);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+/* =================== HEADINGS =================== */
+h2.fw-bold {
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+/* =================== CARDS =================== */
+.card {
+  border-radius: var(--card-border-radius);
+  border: none;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-bg);
+}
+
+.card:hover {
+  transform: var(--card-hover-transform);
+  box-shadow: var(--card-box-shadow);
+}
+
+/* =================== CANVAS =================== */
+.canvas {
+  min-height: var(--canvas-min-height);
+}
+
+</style>
+
+
+<div class="container-fluid mt-4">
+  <div class="row">
+
+    <!-- sidebar -->
+    <div class="col-md-3 col-lg-2 mb-4">
+      {% include 'accounts/includes/sidebar.html' %}
+    </div>
+
+    <!-- main content -->
+    <div class="col-md-9 col-lg-10">
+
+      <div class="row mb-4 text-center">
+        <div class="col-12">
+          <h2 class="fw-bold">Advanced Analytics Dashboard</h2>
+          <p class="">🚀 Hardcoded Demo Charts</p>
+          <hr style="width:60%;margin:0 auto;opacity:0.3;">
+        </div>
+      </div>
+
+      <div class="row g-4">
+
+        <div class="col-md-6 d-flex">
+          <div class="card shadow-sm p-3 w-100 text-center">
+            <h5 class="mb-3">Monthly Revenue</h5>
+            <canvas id="chartRevenue"></canvas>
+          </div>
+        </div>
+
+        <div class="col-md-6 d-flex">
+          <div class="card shadow-sm p-3 w-100 text-center">
+            <h5 class="mb-3">User Registrations</h5>
+            <canvas id="chartUsers"></canvas>
+          </div>
+        </div>
+
+        <div class="col-md-6 d-flex mx-auto">
+          <div class="card shadow-sm p-3 w-100 text-center">
+            <h5 class="mb-3">Product Category Share</h5>
+            <canvas id="chartPie"></canvas>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+
+{% endblock  %}
+
+{% block extra_js %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const labels = ["Jan","Feb","Mar","Apr","May","Jun","Jul"];
+
+new Chart(document.getElementById("chartRevenue"), {
+  type: "line",
+  data: {
+    labels,
+    datasets: [{ 
+      label:"Revenue", 
+      data: [1200,1500,1800,2400,1900,3100,4000],
+      borderWidth: 2 
+    }]
+  }
+});
+
+new Chart(document.getElementById("chartUsers"), {
+  type: "bar",
+  data: {
+    labels,
+    datasets: [{ 
+      label:"Users Registered", 
+      data: [10,22,18,30,26,42,51],
+      borderWidth: 1 
+    }]
+  }
+});
+
+new Chart(document.getElementById("chartPie"), {
+  type: "pie",
+  data: {
+    labels: ["Electronics","Clothes","Sports","Other"],
+    datasets: [{
+      data: [45,25,20,10]
+    }]
+  }
+});
+</script>
+{% endblock %}

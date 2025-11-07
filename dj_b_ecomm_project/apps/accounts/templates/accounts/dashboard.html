@@ -7,137 +7,162 @@
 
 {% block content %}
 <style>
-  /* 🌈 Dashboard Look */
-  body {
-    background: linear-gradient(135deg, #f4f9ff, #e6f0ff);
-  }
+/* =================== GLOBAL BODY =================== */
+body {
+  background: var(--body-bg);
+  color: var(--text-color);
 
-  h2.fw-bold {
-    color: #083a4f;
-    font-weight: 700;
-  }
+}
 
-  /* 🧩 Card Styling */
-  .card {
-    border-radius: 16px;
-    border: none;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-  }
+/* =================== HEADINGS =================== */
+h2.fw-bold {
+  color: var(--title-color);
+  font-weight: 700;
+}
 
-  .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 10px 25px rgba(8, 58, 79, 0.15);
-  }
+/* =================== CARDS =================== */
+.card {
+  background-color: var(--card-bg);
+  border-radius: var(--card-radius, 16px);
+  border: var(--card-border, none);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+ 
+  color: var(--text-color); /* ensures dark mode text is visible */
+}
 
-  /* 🖼 Card Image - Fixed Height */
-  .card-img-top {
-    width: 100%;
-    height: 200px; /* fixed height for uniform cards */
-    object-fit: cover;
-    border-bottom: 1px solid #eaeaea;
-  }
+.card:hover {
+  transform: var(--card-hover-transform, translateY(-6px));
+  box-shadow: var(--card-hover-shadow, 0 10px 25px rgba(0,0,0,0.15));
+  background-color: var(--card-hover-bg, var(--card-bg));
+}
 
-  /* 🧭 Buttons */
-  .btn-primary {
-    background: linear-gradient(90deg, #083a4f, #0a607d);
-    border: none;
-    font-weight: 500;
-  }
+/* =================== CARD IMAGE =================== */
+.card-img-top {
+  width: 100%;
+  height: var(--card-img-height, 200px);
+  object-fit: cover;
+  border-bottom: 1px solid var(--card-img-border, #eaeaea);
+  transition: all 0.3s ease;
+}
 
-  .btn-primary:hover {
-    background: #0a607d;
-  }
+/* =================== BUTTONS =================== */
+.btn-primary {
+  background: var(--btn-primary-bg, linear-gradient(90deg, #083a4f, #0a607d));
+  border: none;
+  font-weight: 500;
+  color: var(--btn-primary-text, #ffffff);
+  transition: background 0.3s ease, color 0.3s ease;
+}
 
-  .btn-outline-primary {
-    border-color: #083a4f;
-    color: #083a4f;
-  }
+.btn-primary:hover {
+  background: var(--btn-primary-hover-bg, #0a607d);
+  color: var(--btn-primary-hover-text, #ffffff);
+}
 
-  .btn-outline-primary:hover {
-    background: #083a4f;
-    color: white;
-  }
+.btn-outline-primary {
+  border-color: var(--btn-outline-color, #083a4f);
+  color: var(--btn-outline-color, #083a4f);
+  transition: background 0.3s ease, color 0.3s ease;
+}
 
-  /* 👤 Profile Avatar */
-  .profile-avatar {
-    border: 3px solid #083a4f;
-    padding: 2px;
-  }
+.btn-outline-primary:hover {
+  background: var(--btn-outline-hover-bg, #083a4f);
+  color: var(--btn-outline-hover-text, #ffffff);
+}
 
-  /* ✨ Smooth Animation */
-  .container-fluid {
-    animation: fadeIn 0.8s ease-in;
-  }
+/* =================== PROFILE AVATAR =================== */
+.profile-avatar {
+  border: 3px solid var(--avatar-border, #083a4f);
+  padding: 2px;
+  border-radius: 50%;
+}
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(15px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+/* =================== CONTAINER ANIMATION =================== */
 
-  /* 🎨 Divider */
-  hr {
-    width: 60%;
-    margin: 0 auto;
-    border: 1px solid #083a4f;
-    opacity: 0.3;
-  }
 
-  /* Align text */
-  .text-muted {
-    font-size: 0.9rem;
-  }
+/* =================== HORIZONTAL RULE =================== */
+hr {
+  width: 60%;
+  margin: 0 auto;
+  border: 1px solid var(--title-color, #083a4f);
+  opacity: 0.3;
+}
 
-  /* Equal card height on all screens */
-  .row.g-4 > div {
-    display: flex;
-  }
+/* =================== TEXT STYLES =================== */
+.text-muted {
+  font-size: 0.9rem;
+  color: var(--text-muted, #6c757d);
+}
 
-  .card-body {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+/* =================== LAYOUT =================== */
+.row.g-4 > div {
+  display: flex;
+}
+
+.card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* =================== DARK MODE SUPPORT =================== */
+[data-theme="dark"] {
+  --body-bg: #0b1527;
+  --text-color: #ffffff;
+  --title-color: #ffffff;
+  --card-bg: #1b1f36;
+  --card-hover-bg: #2c3150;
+  --card-border: none;
+  --card-img-border: #333851;
+  --btn-primary-bg: #673ab7;
+  --btn-primary-hover-bg: #ff4081;
+  --btn-primary-text: #ffffff;
+  --btn-primary-hover-text: #ffffff;
+  --btn-outline-color: #ffffff;
+  --btn-outline-hover-bg: #ff4081;
+  --btn-outline-hover-text: #ffffff;
+  --avatar-border: #ffffff;
+  --text-muted: #cbd5e1;
+}
+
 </style>
 
 <div class="container-fluid mt-4">
   <div class="row">
-    <!-- Sidebar -->
     <div class="col-md-3 col-lg-2 mb-4">
       {% include 'accounts/includes/sidebar.html' %}
     </div>
 
-    <!-- Main Content -->
     <div class="col-md-9 col-lg-10">
-      <!-- Header -->
+
       <div class="row mb-4 text-center">
         <div class="col-12">
           <h2 class="fw-bold">
             {% trans "Welcome," %} {{ request.user.username }} 👋
           </h2>
-          <p class="text-muted">
-            {% trans "Manage your account, track orders, and explore analytics all in one place." %}
-          </p>
+
+         {% if request.user.analytics_level == "Advanced" %}
+    <p class="">🚀 Advanced Analytics Mode Enabled — You’re viewing extended insights</p>
+{% elif request.user.analytics_level == "Professional" %}
+    <p class="">💼 Professional Analytics Mode Active — Deep performance insights available</p>
+{% else %}
+    <p class="">Basic dashboard view — Upgrade to unlock analytics</p>
+{% endif %}
+
           <hr />
         </div>
       </div>
 
-      <!-- Dashboard Cards -->
       <div class="row g-4">
-        <!-- 👤 Profile Card -->
+
+        <!-- PROFILE -->
         <div class="col-md-4 d-flex">
           <div class="card shadow-sm text-center w-100">
-            <div class="card-body d-flex flex-column justify-content-between">
+            <div class="card-body d-flex flex-direction-column justify-content-between">
               <div>
                 <img
                   src="{% if request.user.profile_image %}{{ request.user.profile_image.url }}{% else %}https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80{% endif %}"
@@ -147,32 +172,33 @@
                   alt="{% trans 'User Profile' %}"
                 />
                 <h5 class="card-title">{{ request.user.username }}</h5>
-                <p class="text-muted">{{ request.user.email }}</p>
+                <p class="">{{ request.user.email }}</p>
               </div>
               <div class="mt-3">
-               {% if request.user.is_authenticated and request.user.username %}
-  <a href="{% url 'accounts:profile' username=request.user.username %}">
-    <i class="bi bi-person-circle"></i> {% trans "My Profile" %}
-  </a>
-{% endif %}
+                {% if request.user.is_authenticated and request.user.username %}
+                  <a href="{% url 'accounts:profile' username=request.user.username %}">
+                    <i class="bi bi-person-circle"></i> {% trans "My Profile" %}
+                  </a>
+                {% endif %}
               </div>
             </div>
           </div>
         </div>
 
-        <!-- 🛒 Orders Card -->
+        <!-- ORDERS -->
         <div class="col-md-4 d-flex">
           <div class="card shadow-sm w-100">
-            <img
-              src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80"
-              class="card-img-top"
-              alt="{% trans 'Orders Image' %}"
-            />
+            <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=800&q=80"
+                 class="card-img-top" alt="{% trans 'Orders Image' %}">
             <div class="card-body text-center">
               <h5 class="card-title">{% trans "Orders" %}</h5>
-              <p class="text-muted">
-                {% trans "Check your past and current orders, track shipments, and manage returns." %}
-              </p>
+
+             {% if request.user.analytics_level == "Advanced" or request.user.analytics_level == "Professional" %}
+    <p class="">Analytics: Best sellers, ROI, margin performance, returns pattern</p>
+{% else %}
+    <p class="">Check your past and current orders, track shipments, and manage returns.</p>
+{% endif %}
+
               <a href="{% url 'my_orders' %}" class="btn btn-outline-primary btn-sm w-100 mt-auto">
                 <i class="bi bi-bag-check me-1"></i> {% trans "View Orders" %}
               </a>
@@ -180,18 +206,15 @@
           </div>
         </div>
 
-        <!-- ⚙️ Account Settings Card -->
+        <!-- SETTINGS -->
         <div class="col-md-4 d-flex">
           <div class="card shadow-sm w-100">
-            <img
-              src="https://images.unsplash.com/photo-1581090700227-1e37b190418e?auto=format&fit=crop&w=800&q=80"
-              class="card-img-top"
-              alt="{% trans 'Settings Image' %}"
-            />
+            <img src="https://images.unsplash.com/photo-1581090700227-1e37b190418e?auto=format&fit=crop&w=800&q=80"
+                 class="card-img-top" alt="{% trans 'Settings Image' %}">
             <div class="card-body text-center">
               <h5 class="card-title">{% trans "Account Settings" %}</h5>
-              <p class="text-muted">
-                {% trans "Update personal info, change password, or manage privacy preferences." %}
+              <p class="">
+                Update personal info, change password, or manage privacy preferences.
               </p>
               <a href="{% url 'accounts:admin_settings' %}" class="btn btn-outline-primary btn-sm w-100 mt-auto">
                 <i class="bi bi-gear me-1"></i> {% trans "Go to Settings" %}
@@ -199,8 +222,37 @@
             </div>
           </div>
         </div>
+
+        {% if request.user.analytics_level == "Advanced" or request.user.analytics_level == "Professional" %}
+        <!-- ANALYTICS CARD -->
+        <div class="col-md-4 d-flex">
+          <div class="card shadow-sm w-100">
+            <img src="{% static 'images/analytics_dashboard.jpg' %}" alt="Dashboard">
+            <div class="card-body text-center">
+              <h5 class="card-title">Analytics Dashboard</h5>
+              <p class="">Explore charts, trends, conversions & more.</p>
+              <a href="{% url 'accounts:advanced_analytics' %}" class="btn btn-outline-primary btn-sm w-100 mt-auto">Open Analytics</a>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
+        {% if request.user.analytics_level == "Professional" %}
+        <!-- AI CARD -->
+        <div class="col-md-4 d-flex">
+          <div class="card shadow-sm w-100">
+            <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800&q=80"
+                 class="card-img-top" alt="AI Assistant">
+            <div class="card-body text-center">
+              <h5 class="card-title">AI Assistant</h5>
+              <p class="">AI powered assistant to help you increase conversions, predict trends & improve product performance.</p>
+              <a href="#" class="btn btn-outline-primary btn-sm w-100 mt-auto">Open AI Assistant</a>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
       </div>
-      <!-- /Dashboard Cards -->
     </div>
   </div>
 </div>

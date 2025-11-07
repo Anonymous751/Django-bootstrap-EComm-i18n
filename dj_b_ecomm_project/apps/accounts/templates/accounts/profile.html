@@ -1,100 +1,109 @@
-{% extends "base.html" %}
-{% load static %}
+  {% extends "base.html" %}
+  {% load static %}
+  {% load i18n %}
+  {% get_current_language as LANG %}
+  {% block title %}{% trans "Profile" %} / ShopEase{% endblock %}
 
-{% block title %}Profile / ShopEase{% endblock %}
+  {% block content %}
+  <div class="container-fluid mt-4">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-3 col-lg-2 mb-4">
+        {% include 'accounts/includes/sidebar.html' with request=request %}
+      </div>
 
-{% block content %}
-<div class="container-fluid mt-4">
-  <div class="row">
-    <!-- Sidebar -->
-    <div class="col-md-3 col-lg-2 mb-4">
-  {% include 'accounts/includes/sidebar.html' with request=request %}
-</div>
-
-    <!-- Main Content -->
-    <div class="col-md-9 col-lg-10">
-      {% if request.user == profile_user or request.user.is_superuser or request.user.is_staff and profile_user.is_staff or request.user.is_staff and profile_user.is_active %}
-        
-        <!-- Header -->
-        <div class="profile-header bg-gradient text-white p-4 rounded-3 shadow-sm mb-4">
-          <div class="d-flex align-items-center justify-content-between flex-wrap">
-            <h2 class="fw-bold mb-0">
-              <i class="bi bi-person-circle me-2"></i>{{ profile_user.username }}’s Profile
-            </h2>
-            <span class="badge bg-light text-dark px-3 py-2">
-              {% if profile_user.is_superuser %}
-                Superuser
-              {% elif profile_user.is_staff %}
-                Staff
-              {% else %}
-                Active User
-              {% endif %}
-            </span>
-          </div>
-        </div>
-
-        <!-- Profile Card -->
-        <div class="card shadow-sm border-0 p-4 mb-4">
-          <div class="row align-items-center">
-            <!-- Profile Image -->
-            <div class="col-md-4 text-center mb-3 mb-md-0">
-              {% if profile_user.profile_image %}
-                <img src="{{ profile_user.profile_image.url }}" alt="Profile" class="rounded-circle shadow-sm" width="150" height="150">
-              {% else %}
-                <img src="{% static 'img/default-profile.png' %}" alt="Profile" class="rounded-circle shadow-sm" width="150" height="150">
-              {% endif %}
-            </div>
-
-            <!-- Profile Info -->
-            <div class="col-md-8">
-              <h4 class="fw-bold">{{ profile_user.username }}</h4>
-              <p class="text-muted mb-1">
-                <i class="bi bi-envelope me-2"></i>{{ profile_user.email }}
-              </p>
-              <p class="text-muted">
-                <i class="bi bi-calendar3 me-2"></i>Joined: {{ profile_user.date_joined|date:"F d, Y" }}
-              </p>
-
-              {% if profile_user.is_private %}
-                <span class="badge bg-secondary px-3 py-2">
-                  <i class="bi bi-lock me-1"></i>Private Account
-                </span>
-              {% else %}
-                <span class="badge bg-success px-3 py-2">
-                  <i class="bi bi-unlock me-1"></i>Public Account
-                </span>
-              {% endif %}
+      <!-- Main Content -->
+      <div class="col-md-9 col-lg-10">
+        {% if request.user == profile_user or request.user.is_superuser or request.user.is_staff and profile_user.is_staff or request.user.is_staff and profile_user.is_active %}
+          
+          <!-- Header -->
+          <div class="profile-header bg-gradient text-white p-4 rounded-3 shadow-sm mb-4">
+            <div class="d-flex align-items-center justify-content-between flex-wrap">
+              <h2 class="fw-bold mb-0">
+                <i class="bi bi-person-circle me-2"></i>{{ profile_user.username }}’s {% trans "Profile" %}
+              </h2>
+              <span class="badge bg-light text-dark px-3 py-2">
+                {% if profile_user.is_superuser %}
+                  {% trans "Superuser" %}
+                {% elif profile_user.is_staff %}
+                  {% trans "Staff" %}
+                {% else %}
+                  {% trans "Active User" %}
+                {% endif %}
+              </span>
             </div>
           </div>
-        </div>
 
-        <!-- View Other Profiles -->
-        <div class="card shadow-sm border-0 p-4">
-          <h5 class="fw-bold mb-3"><i class="bi bi-people me-2"></i>View Other User Profiles</h5>
-          <form method="get" id="userSelectForm">
-            <div class="input-group">
-              <select id="userSelect" class="form-select">
-  <option value="">-- Select User --</option>
+          <!-- Profile Card -->
+          <div class="card shadow-sm border-0 p-4 mb-4">
+            <div class="row align-items-center">
+              <!-- Profile Image -->
+              <div class="col-md-4 text-center mb-3 mb-md-0">
+                {% if profile_user.profile_image %}
+                  <img src="{{ profile_user.profile_image.url }}" alt="{% trans 'Profile' %}" class="rounded-circle shadow-sm" width="150" height="150">
+                {% else %}
+                  <img src="{% static 'img/default-profile.png' %}" alt="{% trans 'Profile' %}" class="rounded-circle shadow-sm" width="150" height="150">
+                {% endif %}
+              </div>
+
+              <!-- Profile Info -->
+              <div class="col-md-8">
+                <h4 class="fw-bold">{{ profile_user.username }}</h4>
+                <p class="text-muted mb-1">
+                  <i class="bi bi-envelope me-2"></i>{{ profile_user.email }}
+                </p>
+                <p class="text-muted">
+                  <i class="bi bi-calendar3 me-2"></i>{% trans "Joined" %}: {{ profile_user.date_joined|date:"F d, Y" }}
+                </p>
+
+                {% if profile_user.is_private %}
+                  <span class="badge bg-secondary px-3 py-2">
+                    <i class="bi bi-lock me-1"></i>{% trans "Private Account" %}
+                  </span>
+                {% else %}
+                  <span class="badge bg-success px-3 py-2">
+                    <i class="bi bi-unlock me-1"></i>{% trans "Public Account" %}
+                  </span>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- View Other Profiles -->
+          <div class="card shadow-sm border-0 p-4">
+            <h5 class="fw-bold mb-3"><i class="bi bi-people me-2"></i>{% trans "View Other User Profiles" %}</h5>
+            <form method="get" id="userSelectForm">
+              <div class="input-group">
+               
+
+<select id="userSelect" class="form-select">
+  <option value="">{% trans "-- Select User --" %}</option>
   {% for u in all_users %}
-    {% if u.username %}
-      <option value="{% url 'accounts:profile' username=u.username %}">{{ u.username }}</option>
-    {% endif %}
+    <option value="{% url 'accounts:profile' username=u.username %}">
+      {{ u.display_name|default:u.username }}
+    </option>
   {% endfor %}
 </select>
-              <button type="button" class="btn btn-primary" onclick="redirectToProfile()">
-                <i class="bi bi-eye"></i> View
-              </button>
-            </div>
-          </form>
-        </div>
+                <button type="button" class="btn btn-primary" onclick="redirectToProfile()">
+                  <i class="bi bi-eye"></i> {% trans "View" %}
+                </button>
+              </div>
+            </form>
+          </div>
 
-      {% else %}
-        <!-- Restricted Access -->
-        <div class="alert alert-danger text-center mt-4 p-4 shadow-sm rounded-3 fade show" role="alert" id="accessDeniedMsg">
-          <i class="bi bi-shield-lock fs-4 me-2"></i>
-          <strong>Access Denied:</strong> You do not have permission to view this profile.
-        </div>
+        {% else %}
+          <!-- Restricted Access -->
+          <div class="alert alert-danger text-center mt-4 p-4 shadow-sm rounded-3 fade show" role="alert" id="accessDeniedMsg">
+            <i class="bi bi-shield-lock fs-4 me-2"></i>
+            <strong>{% trans "Access Denied:" %}</strong> {% trans "You do not have permission to view this profile." %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  {% endblock %}
 
+{% block extra_js %}
         <script>
           // Fade-out effect for the message
           setTimeout(() => {
@@ -105,7 +114,7 @@
             }
           }, 4000);
         </script>
-      {% endif %}
+     
     </div>
   </div>
 </div>
@@ -120,48 +129,84 @@ function redirectToProfile() {
 
 {% block extra_css %}
 <style>
-/* Gradient Header */
+/* =================== VARIABLES =================== */
+:root {
+  /* Body & text */
+  --body-bg: #f4f9ff;
+  --text-color: #0a3a4f;
+
+  /* Profile header */
+  --profile-header-gradient-start: #083a4f;
+  --profile-header-gradient-end: #0d6efd;
+  --profile-header-text: #ffffff;
+  --profile-header-icon: #ffd700;
+
+  /* Cards */
+  --card-bg: #ffffff;
+  --card-hover-bg: #f0f0f0;
+  --card-shadow: 0 4px 15px rgba(0,0,0,0.1);
+  --hover-transform: translateY(-3px);
+
+  /* Badge */
+  --badge-bg: #f8f9fa;
+  --badge-text: #083a4f;
+
+  /* Muted text */
+  --text-muted: #495057;
+
+  /* Buttons & selects */
+  --btn-bg: #0d6efd;
+  --btn-text: #ffffff;
+  --btn-border-radius: 0.5rem;
+
+  /* Gradient text */
+  --gradient-text: linear-gradient(90deg, #ff6a00, #ee0979, #00c6ff);
+}
+
+/* =================== DARK MODE =================== */
+[data-theme="dark"] {
+  --body-bg: #0b1527;
+  --text-color: #ffffff;
+
+  --profile-header-gradient-start: #375a7f;
+  --profile-header-gradient-end: #2c3150;
+  --profile-header-text: #ffffff;
+  --profile-header-icon: #ffd700;
+
+  --card-bg: #1b1f36;
+  --card-hover-bg: #2c3150;
+  --card-shadow: 0 4px 15px rgba(0,0,0,0.5);
+
+  --badge-bg: #2c3150;
+  --badge-text: #ffffff;
+
+  --text-muted: #cbd5e1;
+
+  --btn-bg: #375a7f;
+  --btn-text: #ffffff;
+}
+
+/* =================== GLOBAL BODY =================== */
+body {
+  background-color: var(--body-bg);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+/* =================== PROFILE HEADER =================== */
 .profile-header {
-  background: linear-gradient(135deg, #0d6efd, #6c63ff);
-  color: white;
-}
-
-/* Card styling */
-.card {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-/* Profile Image */
-.rounded-circle {
-  object-fit: cover;
-  border: 3px solid #e9ecef;
-}
-
-/* Button and Select */
-select.form-select {
-  border-radius: 0.5rem;
-}
-.btn-primary {
-  border-radius: 0.5rem;
-}
-
-.profile-header {
-  background: linear-gradient(135deg, #083a4f, #0d6efd);
-  color: #fff;
+  background: linear-gradient(135deg, var(--profile-header-gradient-start), var(--profile-header-gradient-end));
+  color: var(--profile-header-text);
   border-radius: 0.75rem;
   padding: 1.5rem 1.8rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
 }
 
-/* 🌈 Gradient Text for Profile Title */
 .profile-header h2 {
   font-size: 1.9rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #ff6a00, #ee0979, #00c6ff);
+  background: var(--gradient-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-transform: capitalize;
@@ -172,86 +217,74 @@ select.form-select {
   gap: 0.4rem;
 }
 
-/* Icon styling */
 .profile-header i {
   font-size: 2rem;
-  color: #ffd700; /* gold */
+  color: var(--profile-header-icon);
 }
 
-/* Badge inside header */
+/* =================== BADGES =================== */
 .profile-header .badge {
-  background: #ffffff !important;
-  color: #083a4f !important;
-  font-weight: 600;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Light badge inside dark header */
-.profile-header .badge {
-  background-color: #f8f9fa !important;
-  color: #083a4f !important;
+  background-color: var(--badge-bg) !important;
+  color: var(--badge-text) !important;
   font-weight: 500;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-/* 🔹 Profile Info Section */
+/* =================== CARDS =================== */
+.card,
+.dropdown-card,
+.privacy-card,
+.settings-card {
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  border-radius: 16px;
+  border: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.card:hover,
+.dropdown-card:hover,
+.privacy-card:hover,
+.settings-card:hover {
+  transform: var(--hover-transform);
+  box-shadow: var(--card-shadow);
+  background-color: var(--card-hover-bg);
+}
+
+/* Card text */
+.card-body h5,
+.card-body p,
+.dropdown-card h5,
+.dropdown-card p,
+.privacy-card h5,
+.privacy-card p,
+.settings-card h5,
+.settings-card p {
+  color: var(--text-color);
+}
+
 .card .text-muted {
-  color: #495057 !important; /* darker gray for visibility */
+  color: var(--text-muted) !important;
   font-size: 0.95rem;
 }
 
-.col-md-8 h4 {
-  color: #083a4f;
-  margin-bottom: 0.5rem;
-}
-
-.badge.bg-success, .badge.bg-secondary {
-  font-size: 0.85rem;
-  padding: 0.4rem 0.7rem;
-}
-
-/* 🔹 Profile Image */
+/* =================== PROFILE IMAGE =================== */
 .rounded-circle {
-  border: 3px solid #e9ecef;
+  border: 3px solid var(--badge-bg);
   object-fit: cover;
 }
 
-/* 🔹 Hover Effect for Cards */
-.card {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
-}
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-
-
-/* Make profile info text darker and easier to read */
-.profile-header {
-  background: linear-gradient(135deg, #083a4f, #0d6efd);
-  color: white;
-}
-
-.card .text-muted {
-  color: #495057 !important; /* darker gray for visibility */
-  font-size: 0.95rem; /* slightly smaller text */
-}
-
-/* Align profile info neatly */
-.col-md-8 h4 {
-  color: #083a4f;
-}
-
-.badge.bg-success, .badge.bg-secondary {
-  font-size: 0.85rem;
-  padding: 0.4rem 0.7rem;
-}
-
-/* Optional hover effect for profile card */
-.card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+/* =================== BUTTONS & SELECT =================== */
+select.form-select,
+.btn-primary {
+  border-radius: var(--btn-border-radius);
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
+  transition: all 0.3s ease;
 }
 
 </style>

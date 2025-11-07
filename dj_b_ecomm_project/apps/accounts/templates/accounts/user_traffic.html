@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}User Traffic / ShopEase{% endblock title %}
+
+{% block content %}
+<style>
+<style>
+/* =================== DYNAMIC PAGE THEME =================== */
+:root {
+  /* Page background & text */
+  --body-bg: #f8fbff;
+  --text-color: #083a4f;
+
+  /* Card background & text */
+  --card-bg: #ffffff;
+  --card-text: #083a4f;
+
+  /* Analytics section background */
+  --analytics-bg: linear-gradient(135deg,#f8fbff,#eef5ff);
+}
+
+[data-theme="dark"] {
+  --body-bg: #0b1527; /* entire page dark */
+  --text-color: #ffffff;
+
+  --card-bg: rgba(10,15,25,0.95);
+  --card-text: #ffffff;
+
+  --analytics-bg: linear-gradient(135deg,#0b1527,#1a2b4f);
+}
+
+/* =================== BODY =================== */
+body {
+  background: var(--body-bg);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+/* =================== ANALYTICS SECTION =================== */
+.analytics-bg {
+  background: var(--analytics-bg);
+  border-radius: 22px;
+  padding: 25px;
+  transition: background 0.3s ease;
+}
+
+/* =================== CARDS =================== */
+.analytics-bg .card {
+  background-color: var(--card-bg);
+  color: var(--card-text);
+  transition: all 0.3s ease;
+}
+
+/* =================== HEADINGS =================== */
+h2.fw-bold {
+  color: var(--text-color);
+}
+</style>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+
+    <!-- sidebar -->
+    <div class="col-md-3 col-lg-2 mb-4">
+      {% include 'accounts/includes/sidebar.html' %}
+    </div>
+
+    <!-- main -->
+    <div class="col-md-9 col-lg-10">
+
+      <div class="text-center mb-4">
+        <h2 class="fw-bold">User Traffic Analytics</h2>
+        <p class="">Hard coded sample traffic data for demo</p>
+        <hr style="width:54%;margin:0 auto;opacity:0.3;">
+      </div>
+
+      <div class="analytics-bg mt-3">
+        <div class="row g-4">
+
+          <div class="col-md-6 d-flex">
+            <div class="card shadow-sm p-3 w-100">
+              <h5 class="fw-semibold text-primary mb-3">Monthly Visitors</h5>
+              <canvas id="chartMonthlyVisitors"></canvas>
+            </div>
+          </div>
+
+          <div class="col-md-6 d-flex">
+            <div class="card shadow-sm p-3 w-100">
+              <h5 class="fw-semibold text-primary mb-3">Traffic Sources</h5>
+              <canvas id="chartSources"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const labels = ["Jan","Feb","Mar","Apr","May","Jun","Jul"];
+const visitors = [500,800,1200,1600,2100,2400,2800];
+
+const sourcesLabels = ["Direct","Google","Facebook","Instagram","Referral"];
+const sourcesData = [1200,900,600,450,300];
+
+new Chart(document.getElementById("chartMonthlyVisitors"), {
+  type: "line",
+  data: {
+    labels,
+    datasets: [{
+      label:"Visitors",
+      data: visitors,
+      borderColor: "#007bff",
+      backgroundColor: "rgba(0,123,255,0.2)",
+      tension: 0.4
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-color') || '#083a4f' } } },
+    scales: {
+      x: { ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-color') || '#083a4f' } },
+      y: { ticks: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-color') || '#083a4f' } }
+    }
+  }
+});
+
+new Chart(document.getElementById("chartSources"), {
+  type: "doughnut",
+  data: {
+    labels: sourcesLabels,
+    datasets: [{ data: sourcesData, backgroundColor: ["#007bff","#28a745","#ffc107","#dc3545","#6c757d"] }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { labels: { color: getComputedStyle(document.documentElement).getPropertyValue('--text-color') || '#083a4f' } } }
+  }
+});
+</script>
+{% endblock %}

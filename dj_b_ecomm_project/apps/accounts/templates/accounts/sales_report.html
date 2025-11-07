@@ -1,0 +1,471 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}Sales Report / ShopEase{% endblock title %}
+
+{% block content %}
+<style>
+ /* =================== THEME VARIABLES =================== */
+:root {
+  /* Page background */
+  --body-bg: linear-gradient(135deg, #f4f9ff, #e6f0ff);
+  --text-color: #083a4f;
+
+  /* Cards */
+  --card-bg: #ffffff;
+  --card-radius: 14px;
+  --card-box-shadow: 0 10px 30px rgba(8, 58, 79, 0.08);
+  --card-hover-transform: translateY(-6px);
+
+  /* Canvas */
+  --canvas-min-height: 240px;
+  --canvas-max-height: 360px;
+
+  /* Table */
+  --table-head-bg: linear-gradient(90deg, #e9f6ff, #d6f0ff);
+  --table-head-color: #083a4f;
+  --table-row-bg: #ffffff;
+  --table-row-hover-bg: #f1fbff;
+
+  /* Badge */
+  --badge-bg: linear-gradient(90deg,#e6f8ff,#cff1ff);
+  --badge-color: #083a4f;
+  --badge-shadow: 0 2px 6px rgba(8,58,79,0.06);
+
+  /* KPI box */
+  --kpi-bg: linear-gradient(90deg,#ffffff,#f7fdff);
+  --kpi-shadow: 0 6px 18px rgba(8,58,79,0.04);
+
+  /* Muted text */
+  --text-muted: #6c757d;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] {
+  --body-bg: linear-gradient(135deg, #0b1527, #1a1f36);
+  --text-color: #ffffff;
+
+  --card-bg: rgba(10, 15, 25, 0.95);
+  --card-box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
+
+  --table-head-bg: linear-gradient(90deg, #1a2236, #0f1527);
+  --table-head-color: #ffffff;
+  --table-row-bg: rgba(20, 30, 50, 0.8);
+  --table-row-hover-bg: rgba(30, 40, 60, 0.9);
+
+  --badge-bg: linear-gradient(90deg,#0a1f36,#1a2b4f);
+  --badge-color: #ffffff;
+  --badge-shadow: 0 2px 6px rgba(255,255,255,0.05);
+
+  --kpi-bg: rgba(10,15,25,0.85);
+  --kpi-shadow: 0 6px 18px rgba(255,255,255,0.05);
+
+  --text-muted: #bbbbbb;
+}
+
+/* =================== BODY =================== */
+body {
+  background: var(--body-bg);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+/* =================== HEADINGS =================== */
+h2.fw-bold {
+  color: var(--text-color);
+  font-weight: 700;
+}
+
+/* =================== CARDS =================== */
+.card {
+  border-radius: var(--card-radius);
+  border: none;
+  overflow: hidden;
+  transition: all 0.28s ease;
+  background-color: var(--card-bg);
+}
+
+.card:hover {
+  transform: var(--card-hover-transform);
+  box-shadow: var(--card-box-shadow);
+}
+
+/* =================== CANVAS =================== */
+canvas {
+  min-height: var(--canvas-min-height);
+  max-height: var(--canvas-max-height);
+}
+
+@media (max-width: 767px) {
+  canvas { min-height: 180px; }
+}
+
+/* =================== TABLE =================== */
+.table-analytics thead th {
+  background: var(--table-head-bg);
+  color: var(--table-head-color);
+  border-bottom: 0;
+  font-weight: 700;
+}
+
+.table-analytics tbody tr {
+  background: var(--table-row-bg);
+  transition: background-color 0.15s ease;
+}
+
+.table-analytics tbody tr:hover {
+  background: var(--table-row-hover-bg);
+}
+
+/* =================== BADGES =================== */
+.badge-type {
+  background: var(--badge-bg);
+  color: var(--badge-color);
+  font-weight: 600;
+  border-radius: 999px;
+  padding: .25rem .6rem;
+  box-shadow: var(--badge-shadow);
+}
+
+/* =================== KPI =================== */
+.kpi {
+  border-radius: 12px;
+  padding: 1rem;
+  background: var(--kpi-bg);
+  box-shadow: var(--kpi-shadow);
+}
+
+/* =================== TABLE RESPONSIVE =================== */
+.table-responsive {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* =================== MUTED TEXT =================== */
+.muted-small {
+  font-size: .9rem;
+  color: var(--text-muted);
+}
+
+</style>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+    <!-- sidebar -->
+    <div class="col-12 col-md-3 col-lg-2 mb-4">
+      {% include 'accounts/includes/sidebar.html' %}
+    </div>
+
+    <!-- main -->
+    <div class="col-12 col-md-9 col-lg-10">
+      <div class="row mb-4 text-center">
+        <div class="col-12">
+          <h2 class="fw-bold">Sales Report Dashboard</h2>
+          <p class="">📈 Traffic • 🧠 AI Predictions • 🔥 Top Sellers</p>
+          <hr style="width:60%;margin:0 auto;opacity:0.25;">
+        </div>
+      </div>
+
+      <!-- KPI Row -->
+      <div class="row g-3 mb-3">
+        <div class="col-sm-6 col-md-3">
+          <div class="kpi text-center">
+            <div class="muted-small">Total Revenue</div>
+            <h4 class="mt-2">₹ 1,24,500</h4>
+            <div class="muted-small">+12% vs last month</div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="kpi text-center">
+            <div class="muted-small">New Users</div>
+            <h4 class="mt-2">4,220</h4>
+            <div class="muted-small">+8% vs last month</div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="kpi text-center">
+            <div class="muted-small">Conversion Rate</div>
+            <h4 class="mt-2">2.8%</h4>
+            <div class="muted-small">Stable</div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-3">
+          <div class="kpi text-center">
+            <div class="muted-small">Avg Order Value</div>
+            <h4 class="mt-2">₹ 1,890</h4>
+            <div class="muted-small">+3.5%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1) Charts row -->
+      <div class="row g-4 mb-4">
+        <div class="col-md-6 d-flex">
+          <div class="card shadow-sm p-3 w-100">
+            <h5 class="mb-3">User Traffic</h5>
+            <canvas id="chartTraffic"></canvas>
+            <p class="muted-small mt-2">Visitors over the last 7 months (hardcoded demo).</p>
+          </div>
+        </div>
+
+        <div class="col-md-6 d-flex">
+          <div class="card shadow-sm p-3 w-100">
+            <h5 class="mb-3">AI Prediction (Next Month Sales)</h5>
+            <canvas id="chartAI"></canvas>
+            <p class="muted-small mt-2">Simple ML forecast sample (hardcoded).</p>
+          </div>
+        </div>
+
+        <div class="col-12 d-flex">
+          <div class="card shadow-sm p-3 w-100">
+            <h5 class="mb-3">Top 5 Selling Products</h5>
+            <canvas id="chartTopProducts"></canvas>
+            <p class="muted-small mt-2">Share of sales by top categories.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2) Top 5 Products table -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card shadow-sm p-0">
+            <div class="p-3 border-bottom" style="background: linear-gradient(90deg,#f0fbff,#e6f7ff);">
+              <h5 class="mb-0">Top 5 Products</h5>
+              <p class="muted-small mb-0">Best selling items this period (hardcoded).</p>
+            </div>
+
+            <div class="table-responsive p-3">
+              <table class="table table-analytics align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th style="width:60px">#</th>
+                    <th>Product</th>
+                    <th>Category</th>
+                    <th>Sold</th>
+                    <th>Total Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img src="https://images.unsplash.com/photo-1512496015851-a90fb38ba796?auto=format&fit=crop&w=64&q=60"
+                             class="rounded me-2" width="48" height="48" alt="Shoes">
+                        <div>
+                          <div class="fw-semibold">Running Shoes</div>
+                          <div class="muted-small">SKU: SH-001</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="badge-type">Footwear</span></td>
+                    <td>1,100</td>
+                    <td>₹ 2,75,000</td>
+                  </tr>
+
+                  <tr>
+                    <td>2</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?auto=format&fit=crop&w=64&q=60"
+                             class="rounded me-2" width="48" height="48" alt="Phones">
+                        <div>
+                          <div class="fw-semibold">Smartphone X</div>
+                          <div class="muted-small">SKU: PH-204</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="badge-type">Electronics</span></td>
+                    <td>950</td>
+                    <td>₹ 4,56,000</td>
+                  </tr>
+
+                  <tr>
+                    <td>3</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img src="https://images.unsplash.com/photo-1514995669114-7f8f3a1a3d54?auto=format&fit=crop&w=64&q=60"
+                             class="rounded me-2" width="48" height="48" alt="Jeans">
+                        <div>
+                          <div class="fw-semibold">Blue Jeans</div>
+                          <div class="muted-small">SKU: JE-330</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="badge-type">Apparel</span></td>
+                    <td>780</td>
+                    <td>₹ 1,56,000</td>
+                  </tr>
+
+                  <tr>
+                    <td>4</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img src="https://images.unsplash.com/photo-1526178613535-2b6c3a5c2f9b?auto=format&fit=crop&w=64&q=60"
+                             class="rounded me-2" width="48" height="48" alt="Bags">
+                        <div>
+                          <div class="fw-semibold">Leather Bag</div>
+                          <div class="muted-small">SKU: BG-112</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="badge-type">Accessories</span></td>
+                    <td>650</td>
+                    <td>₹ 1,22,500</td>
+                  </tr>
+
+                  <tr>
+                    <td>5</td>
+                    <td>
+                      <div class="d-flex align-items-center">
+                        <img src="https://images.unsplash.com/photo-1518441902118-0f9f1a3c3b0b?auto=format&fit=crop&w=64&q=60"
+                             class="rounded me-2" width="48" height="48" alt="Headphones">
+                        <div>
+                          <div class="fw-semibold">Wireless Headphones</div>
+                          <div class="muted-small">SKU: HP-501</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td><span class="badge-type">Electronics</span></td>
+                    <td>580</td>
+                    <td>₹ 2,03,000</td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3) Monthly Sales table -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card shadow-sm p-0">
+            <div class="p-3 border-bottom" style="background: linear-gradient(90deg,#f0fbff,#e6f7ff);">
+              <h5 class="mb-0">Monthly Sales</h5>
+              <p class="muted-small mb-0">Orders & revenue by month (hardcoded).</p>
+            </div>
+
+            <div class="table-responsive p-3">
+              <table class="table table-analytics align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Month</th>
+                    <th>Orders</th>
+                    <th>Revenue</th>
+                    <th>Conversion %</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>January</td><td>4,200</td><td>₹ 4,20,000</td><td>2.6%</td></tr>
+                  <tr><td>February</td><td>4,100</td><td>₹ 4,05,000</td><td>2.5%</td></tr>
+                  <tr><td>March</td><td>5,000</td><td>₹ 5,50,000</td><td>3.0%</td></tr>
+                  <tr><td>April</td><td>5,400</td><td>₹ 5,95,000</td><td>3.1%</td></tr>
+                  <tr><td>May</td><td>6,200</td><td>₹ 6,80,000</td><td>3.4%</td></tr>
+                  <tr><td>June</td><td>6,500</td><td>₹ 7,10,000</td><td>3.6%</td></tr>
+                  <tr><td>July</td><td>7,100</td><td>₹ 8,05,000</td><td>3.9%</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4) Product Performance table -->
+      <div class="row mb-5">
+        <div class="col-12">
+          <div class="card shadow-sm p-0">
+            <div class="p-3 border-bottom" style="background: linear-gradient(90deg,#f0fbff,#e6f7ff);">
+              <h5 class="mb-0">Product Performance</h5>
+              <p class="muted-small mb-0">Stock & revenue performance (hardcoded).</p>
+            </div>
+
+            <div class="table-responsive p-3">
+              <table class="table table-analytics align-middle mb-0">
+                <thead>
+                  <tr>
+                    <th>Product</th>
+                    <th>Brand</th>
+                    <th>Stock Left</th>
+                    <th>Total Revenue</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>Running Shoes</td><td>Stride</td><td>120</td><td>₹ 2,75,000</td></tr>
+                  <tr><td>Smartphone X</td><td>Nova</td><td>45</td><td>₹ 4,56,000</td></tr>
+                  <tr><td>Blue Jeans</td><td>DenimCo</td><td>220</td><td>₹ 1,56,000</td></tr>
+                  <tr><td>Leather Bag</td><td>CarryAll</td><td>80</td><td>₹ 1,22,500</td></tr>
+                  <tr><td>Wireless Headphones</td><td>Soundify</td><td>60</td><td>₹ 2,03,000</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const labels = ["Jan","Feb","Mar","Apr","May","Jun","Jul"];
+
+// Hardcoded data (matching tables)
+const traffic = [1200,1500,2200,2600,3000,3300,4000];
+const aiPrediction = [3000,3400,3900,4200,4800,5500,6000];
+const topProducts = ["Running Shoes","Smartphone X","Blue Jeans","Leather Bag","Wireless Headphones"];
+const topValues = [1100,950,780,650,580];
+
+// Traffic (line)
+new Chart(document.getElementById("chartTraffic"), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [{
+      label: 'Visitors',
+      data: traffic,
+      tension: 0.35,
+      fill: true,
+      backgroundColor: 'rgba(8,58,79,0.06)',
+      borderColor: 'rgba(8,58,79,0.9)',
+      pointRadius: 3
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+});
+
+// AI Prediction (bar)
+new Chart(document.getElementById("chartAI"), {
+  type: 'bar',
+  data: {
+    labels,
+    datasets: [{
+      label: 'Predicted Sales',
+      data: aiPrediction,
+      borderRadius: 6
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { display: false } } }
+});
+
+// Top Products (doughnut)
+new Chart(document.getElementById("chartTopProducts"), {
+  type: 'doughnut',
+  data: {
+    labels: topProducts,
+    datasets: [{
+      data: topValues,
+      hoverOffset: 8
+    }]
+  },
+  options: { responsive: true, plugins: { legend: { position: 'right' } } }
+});
+</script>
+{% endblock %}

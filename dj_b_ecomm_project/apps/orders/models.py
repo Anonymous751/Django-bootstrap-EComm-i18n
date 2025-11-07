@@ -2,11 +2,12 @@
 from django.db import models
 from django.conf import settings 
 from apps.shop.models import Product
+from django.utils.translation import gettext_lazy as _
 
 class Order(models.Model):
-    STATUS_CHOICES = (('pending', "Pending"),
-                      ('delivered', "Delivered"),
-                      ('cancelled', "Cancelled")
+    STATUS_CHOICES = (('pending', _("Pending")),
+                      ('delivered', _("Delivered")),
+                      ('cancelled', _("Cancelled"))
                       )
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)

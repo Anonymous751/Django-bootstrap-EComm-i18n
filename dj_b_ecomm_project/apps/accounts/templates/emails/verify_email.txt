@@ -1,0 +1,10 @@
+Hi {{ user.get_full_name|default:user.username }},
+
+Welcome to {{ site_name }}!
+
+Click this link to verify your email and activate your account:
+{{ verify_url }}
+
+If you didn't sign up, ignore this email.
+Thanks,
+{{ site_name }} team

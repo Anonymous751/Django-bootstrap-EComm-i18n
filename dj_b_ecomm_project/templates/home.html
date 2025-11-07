@@ -10,18 +10,95 @@
 />
 
 <style>
-/* ==== HERO SECTION ==== */
+/* =================== GLOBAL VARIABLES =================== */
+:root {
+  /* general */
+  --text-color: #d4d4d4ff;
+  --body-bg: #ffffff;
+
+  --welcome-text-color: #083a4f;
+
+  /* hero */
+  --hero-overlay: rgba(0,0,0,0.62);
+  --hero-height-desktop: 420px;
+  --hero-height-mobile: 320px;
+  --hero-title-size: 2.5rem;
+  --hero-title-size-m: 1.8rem;
+  --hero-sub-size: 1.1rem;
+  --hero-sub-size-m: 1rem;
+
+  /* brand / gradient */
+  --brand-dark: #083a4f;
+  --brand-light: #00a8b5;
+  --gradient-text: linear-gradient(90deg, var(--brand-dark), var(--brand-light));
+
+  /* products */
+  --products-bg: #f3f4f6;
+  --product-card-bg: #ffffff;
+  --product-card-hover-scale: 1.05;
+  --product-card-hover-bg: #f0f0f0;
+  --product-price-color: #1b1b1b; /
+
+  /* buttons */
+  --btn-bg: #ffffff;
+  --btn-text: var(--brand-dark);
+  --btn-bg-hover: var(--brand-dark);
+  --btn-text-hover: #ffffff;
+
+  /* product image */
+  --product-img-height: 200px;
+}
+
+/* ================= DARK MODE OVERRIDE ================= */
+[data-theme="dark"] {
+  --body-bg: #0b1527;
+  --text-color: #e9eef7;
+   --welcome-text-color: #673ab7; 
+
+  --brand-dark: #673ab7;
+  --brand-light: #ff4081;
+  --gradient-text: linear-gradient(90deg, var(--brand-dark), var(--brand-light));
+
+  --products-bg: #101b32;
+  --product-card-bg: #1b1f36;
+  --product-card-hover-bg: #2c3150;
+  --product-price-color: #e9eef7; 
+
+  --btn-bg: var(--brand-dark);
+  --btn-text: #ffffff;
+  --btn-bg-hover: var(--brand-light);
+  --btn-text-hover: #ffffff;
+}
+
+/* ================= GLOBAL BODY ================= */
+body {
+  background: var(--body-bg);
+  color: var(--text-color);
+  transition: background 0.3s, color 0.3s;
+}
+
+.welcome-text {
+  color: #083a4f; /* light mode color */
+  font-weight: 600;
+  font-size: 2rem; /* adjust as needed */
+  transition: color 0.3s ease;
+}
+/* Dark Mode */
+[data-theme="dark"] .welcome-text {
+  color: #ffffff; /* dark mode color */
+}
+
+/* ================= HERO SECTION ================= */
 .hero {
   position: relative;
   width: 100%;
-  height: 420px;
+  height: var(--hero-height-desktop);
   overflow: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* Background video */
 .hero video {
   position: absolute;
   top: 50%;
@@ -33,7 +110,6 @@
   z-index: 0;
 }
 
-/* Overlay for text contrast */
 .hero::before {
   content: "";
   position: absolute;
@@ -41,32 +117,31 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.62);
+  background-color: var(--hero-overlay);
   z-index: 1;
 }
 
-/* Text content */
 .hero .container {
   position: relative;
   z-index: 2;
   text-align: center;
-  color: #fff;
+  color: var(--btn-text-hover);
 }
 
 .hero h1 {
-  font-size: 2.5rem;
+  font-size: var(--hero-title-size);
   font-weight: 700;
   margin-bottom: 0.5rem;
 }
 
 .hero p {
-  font-size: 1.1rem;
+  font-size: var(--hero-sub-size);
   margin-bottom: 1.5rem;
 }
 
 .hero .btn {
-  background-color: #fff;
-  color: #083a4f;
+  background-color: var(--btn-bg);
+  color: var(--btn-text);
   font-weight: 600;
   padding: 0.7rem 1.5rem;
   border-radius: 30px;
@@ -74,42 +149,117 @@
 }
 
 .hero .btn:hover {
-  background-color: #083a4f;
-  color: #fff;
+  background-color: var(--btn-bg-hover);
+  color: var(--btn-text-hover);
 }
 
-/* Responsive hero */
-@media (max-width: 768px) {
-  .hero {
-    height: 320px;
-  }
-  .hero h1 {
-    font-size: 1.8rem;
-  }
-  .hero p {
-    font-size: 1rem;
-  }
+/* responsive hero */
+@media (max-width:768px) {
+  .hero { height: var(--hero-height-mobile); }
+  .hero h1 { font-size: var(--hero-title-size-m); }
+  .hero p { font-size: var(--hero-sub-size-m); }
 }
 
-/* ==== PRODUCT CARDS ==== */
+/* ================= HERO CUSTOMIZATION ================= */
+
+/* Hero H1: white on dark overlay, black on light */
+.hero h1 {
+  background-color: rgba(255, 255, 255, 0.85); /* white background for contrast */
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+}
+
+/* Dark mode hero h1 */
+[data-theme="dark"] .hero h1 {
+  color: #ffffff;
+  background-color: rgba(0,0,0,0.4);
+}
+
+/* Hero "Shop Now" button white text on overlay */
+.hero .btn.btn-light {
+  background-color: #ffffff;
+  color: var(--brand-dark, #083a4f);
+  font-weight: 600;
+  border-radius: 30px;
+  transition: all 0.3s ease;
+}
+
+.hero .btn.btn-light:hover {
+  background-color: var(--brand-dark, #083a4f);
+  color: #ffffff;
+}
+
+/* Search input/button customization */
+form .form-control {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+form .btn-outline-light {
+  background-color: #ffffff;
+  color: var(--brand-dark, #083a4f);
+  border-color: #ffffff;
+}
+
+form .btn-outline-light:hover {
+  background-color: var(--brand-dark, #083a4f);
+  color: #ffffff;
+  border-color: var(--brand-dark, #083a4f);
+}
+
+/* Optional: Dark mode overrides for search */
+[data-theme="dark"] form .form-control {
+  background-color: #1b1f36;
+  color: #ffffff;
+}
+
+[data-theme="dark"] form .btn-outline-light {
+  background-color: #1b1f36;
+  color: #ffffff;
+  border-color: #ffffff;
+}
+
+[data-theme="dark"] form .btn-outline-light:hover {
+  background-color: #ff4081;
+  color: #ffffff;
+  border-color: #ff4081;
+}
+
+/* ================= PRODUCTS SECTION ================= */
+.products {
+  background: var(--products-bg);
+  padding: 40px 0;
+  border-radius: 12px;
+  transition: background 0.3s;
+}
+
+/* product cards */
 .swiper-slide .card {
+  background-color: var(--product-card-bg);
   border: none;
+  border-radius: 12px;
   overflow: hidden;
-  transition: transform 0.3s;
-}
-.swiper-slide .card:hover {
-  transform: scale(1.05);
-}
-.swiper-slide img {
-  height: 200px;
-  object-fit: cover;
+  transition: transform 0.3s, background 0.3s, box-shadow 0.3s;
 }
 
-/* ==== SECTION HEADINGS ==== */
+.swiper-slide .card:hover {
+  transform: scale(var(--product-card-hover-scale));
+  background-color: var(--product-card-hover-bg);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.swiper-slide img {
+  height: var(--product-img-height);
+  object-fit: cover;
+  transition: all 0.3s;
+}
+
+/* section headings */
 .products h2 {
   font-size: 2rem;
   font-weight: 700;
-  background: linear-gradient(90deg, #083a4f, #00a8b5);
+  background: var(--gradient-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   position: relative;
@@ -126,7 +276,7 @@
   left: 0;
   width: 50%;
   height: 3px;
-  background: linear-gradient(90deg, #00a8b5, #083a4f);
+  background: var(--gradient-text);
   transition: width 0.3s ease;
   border-radius: 2px;
 }
@@ -135,16 +285,35 @@
   width: 100%;
 }
 
-/* Responsive heading size */
-@media (max-width: 768px) {
-  .products h2 {
-    font-size: 1.5rem;
-  }
+.swiper-slide .card .product-title {
+  font-weight: 600;
+  color: var(--text-color); /* or gradient if used */
 }
+
+/* product price inside card */
+.swiper-slide .card .product-price {
+  font-weight: 700;
+  color: var(--product-price-color);
+  margin-top: 5px;
+}
+
+/* responsive headings */
+@media (max-width:768px){
+  .products h2 { font-size:1.5rem; }
+}
+
+[data-theme="dark"] .products h2 {
+  background: none !important;
+  -webkit-background-clip: unset !important;
+  -webkit-text-fill-color: #ffffff !important;
+  color: #ffffff !important;
+}
+
 </style>
 {% endblock %}
 
 {% block content %}
+{% include "components/magnifier.html" %}
 <!-- ==== HERO SECTION ==== -->
 <section class="hero mb-5">
   <video autoplay muted loop playsinline>
@@ -153,7 +322,7 @@
   </video>
 
   <div class="container">
-    <h1>{% trans "Welcome to ShopEase" %}</h1>
+   <h1 class="welcome-text">{% trans "Welcome to ShopEase" %}</h1>
     <p>{% trans "Discover amazing products at unbeatable prices!" %}</p>
     <a href="#" class="btn btn-light btn-lg mt-3">{% trans "Shop Now" %}</a>
   </div>
@@ -223,6 +392,8 @@
 </section>
 
 {% include "components/cart_modal.html" %}
+
+
 {% endblock %}
 
 {% block extra_js %}

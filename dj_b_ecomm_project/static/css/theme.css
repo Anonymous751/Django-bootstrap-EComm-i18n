@@ -1,0 +1,89 @@
+/* Light mode default variables */
+:root {
+  --navbar-bg: #083a4f;
+  --body-bg: #ffffff;
+  --text-color: #1b1b1b;
+  
+
+  /* gradient for LIGHT mode */
+  --primary-gradient: linear-gradient(90deg, #B721FF, #FF0066);
+
+  --banner-text-bg: var(--primary-gradient);
+  --btn-bg: var(--primary-gradient);
+
+  --input-bg: #ffffff;
+--input-border: #673ab7;    /* purple */
+--focus-ring: rgba(103, 58, 183, 0.35);
+--focus-border: #ff4081;    /* pink */
+
+--btn-outline-border: #673ab7;
+--btn-outline-text: #083a4f;
+--btn-outline-hover-bg: var(--primary-gradient);
+--btn-outline-hover-text: #fff;
+
+}
+
+/* Dark mode variables override */
+[data-theme="dark"] {
+  --navbar-bg: #111a2e;
+  --body-bg: #0b1527;
+  --text-color: #e9eef7; 
+
+  /* gradient for DARK mode */
+  --primary-gradient: linear-gradient(90deg, #00C9FF, #92FE9D);
+
+  --banner-text-bg: var(--primary-gradient);
+  --btn-bg: var(--primary-gradient);
+
+  --input-bg: #0f1b2f;
+--input-border: var(--primary-gradient);
+--focus-ring: rgba(255, 64, 129, 0.4);
+--focus-border: #ff4081;
+
+--btn-outline-border: var(--primary-gradient);
+--btn-outline-text: #ffffff;
+--btn-outline-hover-bg: var(--primary-gradient);
+--btn-outline-hover-text: #ffffff;
+
+}
+
+/* apply variables */
+body {
+  background: var(--body-bg);
+  color: var(--text-color);
+}
+
+.navbar {
+  background-color: var(--navbar-bg) !important;
+}
+
+/* Headings + titles + labels */
+h1, h2, h3, h4, h5, h6, .heading-gradient, label {
+  color: var(--text-color);
+}
+
+/* in dark mode → gradient text */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6,
+[data-theme="dark"] .heading-gradient,
+[data-theme="dark"] label {
+  background: var(--primary-gradient);
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+
+/* Buttons */
+.btn-primary,
+.btn,
+button,
+a.btn {
+  background: var(--btn-bg);
+  border: none;
+  color: #fff;
+}

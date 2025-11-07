@@ -15,4 +15,8 @@ urlpatterns = [
     path('delete-stock-product/<int:pk>/', views.delete_stock_product_view, name='delete_stock_product'),
     path('stock-product-detail/<int:pk>/', views.stock_product_detail_view, name='stock_product_detail'),
     
+    # comments /review
+    path('review/like/<int:pk>/', views.like_review, name='like_review'),
+    path('review/dislike/<int:pk>/', views.dislike_review, name='dislike_review'),
+    
 ]

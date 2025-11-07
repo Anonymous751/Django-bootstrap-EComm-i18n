@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}Update Product / ShopEase{% endblock %}
+{% load i18n %}
+{% block title %}{% trans "Update Product" %} / ShopEase{% endblock %}
 
 {% block content %}
 <div class="container mt-5 mb-5">
   <div class="card shadow-lg border-0 rounded-4">
     <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-      <h4 class="mb-0">Update Ordered Product: {{ product.name }}</h4>
-      <a href="{% url 'my_orders' %}" class="btn btn-light btn-sm">← Back to My Orders</a>
+      <h4 class="mb-0">{% trans "Update Ordered Product" %}: {{ product.name }}</h4>
+      <a href="{% url 'my_orders' %}" class="btn btn-light btn-sm">← {% trans "Back to My Orders" %}</a>
     </div>
 
     <div class="card-body">
@@ -22,11 +23,11 @@
                    class="img-fluid rounded-4 shadow-sm border" 
                    style="max-height: 250px; object-fit: cover;">
             {% else %}
-              <img src="{% static 'images/no-image.png' %}" alt="No image" 
+              <img src="{% static 'images/no-image.png' %}" alt="{% trans 'No image' %}" 
                    class="img-fluid rounded-4 shadow-sm border"
                    style="max-height: 250px; object-fit: cover;">
             {% endif %}
-            <p class="text-muted mt-2 small">Current Product Image</p>
+            <p class="text-muted mt-2 small">{% trans "Current Product Image" %}</p>
           </div>
 
           <!-- Form Fields -->
@@ -39,8 +40,8 @@
 
         <!-- Buttons -->
         <div class="mt-4 text-center">
-          <button type="submit" class="btn btn-success px-4">💾 Save Changes</button>
-          <a href="{% url 'my_orders' %}" class="btn btn-secondary ms-2 px-4">Cancel</a>
+          <button type="submit" class="btn btn-success px-4">💾 {% trans "Save Changes" %}</button>
+          <a href="{% url 'my_orders' %}" class="btn btn-secondary ms-2 px-4">{% trans "Cancel" %}</a>
         </div>
       </form>
     </div>

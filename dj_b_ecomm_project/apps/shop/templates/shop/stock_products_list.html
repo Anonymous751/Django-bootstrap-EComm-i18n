@@ -18,7 +18,7 @@
       <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
           <h2 class="fw-bold mb-1">🛍️ {% trans "Our Products" %}</h2>
-          <p class="text-muted mb-0">{% trans "Explore all categories and discover amazing items." %}</p>
+          <p class=" mb-0">{% trans "Explore all categories and discover amazing items." %}</p>
         </div>
         <div>
           <a href="#" class="btn btn-primary fw-semibold shadow-sm" data-bs-toggle="modal" data-bs-target="#createProductModal">
@@ -46,7 +46,7 @@
                     {{ field.label_tag }}
                     {{ field }}
                     {% if field.help_text %}
-                      <small class="form-text text-muted">{{ field.help_text }}</small>
+                      <small class="form-text">{{ field.help_text }}</small>
                     {% endif %}
                     {% for error in field.errors %}
                       <div class="text-danger">{{ error }}</div>
@@ -80,7 +80,7 @@
               <!-- Product Info -->
               <div class="card-body text-center d-flex flex-column">
                 <h5 class="card-title text-truncate mb-2">{{ product.name }}</h5>
-                <p class="text-muted mb-2">₹{{ product.price|floatformat:2 }}</p>
+                <p class=" mb-2">₹{{ product.price|floatformat:2 }}</p>
 
                 {% if product.is_featured %}
                   <span class="badge bg-success mb-2">{% trans "Featured" %}</span>
@@ -123,21 +123,103 @@
 
 {% block extra_css %}
 <style>
-.hover-shadow:hover {
-  transform: translateY(-6px);
+/* =================== VARIABLES =================== */
+:root {
+  /* Page background */
+  --body-bg: #ffffff; /* light mode page background */
+  --card-bg: #ffffff;
+  --card-hover-bg: #f0f0f0;
+  --hover-shadow: 0 12px 20px rgba(0,0,0,0.1);
+  --card-text-color: #1b1b1b;
+  --modal-close-color: #000000; /* light mode default */
+
+  /* Buttons hover */
+  --btn-primary-hover-bg: #0d6efd;
+  --btn-primary-hover-text: #ffffff;
+  --btn-warning-hover-bg: #ffc107;
+  --btn-warning-hover-text: #000000;
+  --btn-danger-hover-bg: #dc3545;
+  --btn-danger-hover-text: #ffffff;
+
+  /* Sidebar active link */
+  --sidebar-active-bg: #0d6efd;
+  --sidebar-active-text: #ffffff;
+
+  /* Select inputs */
+  --select-bg: #ffffff;
+  --select-text: #1b1b1b;
+  --select-border: #ced4da;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] {
+  --body-bg: #0b1527;
+  --card-bg: #1b1f36;
+  --card-hover-bg: #2c3150;
+  --hover-shadow: 0 12px 20px rgba(0,0,0,0.5);
+  --card-text-color: #ffffff;
+
+  --btn-primary-hover-bg: #375a7f;
+  --btn-primary-hover-text: #ffffff;
+  --btn-warning-hover-bg: #e0a800;
+  --btn-warning-hover-text: #000000;
+  --btn-danger-hover-bg: #a71d2a;
+  --btn-danger-hover-text: #ffffff;
+
+  --sidebar-active-bg: #375a7f;
+  --sidebar-active-text: #ffffff;
+
+  --select-bg: #1b1f36;
+  --select-text: #ffffff;
+  --select-border: #2c3150;
+}
+
+/* =================== GLOBAL BODY =================== */
+body {
+  background-color: var(--body-bg);
+  color: var(--card-text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+  
+}
+
+/* =================== CARD =================== */
+.card {
+  background-color: var(--card-bg);
+  border-radius: 16px;
+  border: none;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   transition: all 0.3s ease;
-  box-shadow: 0 12px 20px rgba(0,0,0,0.15) !important;
+  color: var(--card-text-color);
 }
 
-.card-body h5 {
-  font-size: 1rem;
-  font-weight: 600;
+.card:hover {
+  background-color: var(--card-hover-bg);
+  box-shadow: var(--hover-shadow) !important;
 }
 
+.card-body h5,
 .card-body p {
-  font-size: 0.9rem;
+  color: var(--card-text-color);
+  transition: color 0.3s ease;
 }
 
+/* =================== SELECT INPUTS =================== */
+.card-header select.form-select {
+  background-color: var(--select-bg);
+  color: var(--select-text);
+  border-color: var(--select-border);
+  transition: all 0.3s ease;
+}
+
+.card-header select.form-select option {
+  background-color: var(--select-bg);
+  color: var(--select-text);
+}
+
+/* =================== BUTTONS =================== */
 .btn-outline-primary,
 .btn-outline-warning,
 .btn-outline-danger {
@@ -146,51 +228,121 @@
   transition: all 0.3s ease;
 }
 
-/* Button hover effects */
-.hover-btn:hover {
-  transform: translateY(-2px);
-}
-
 .btn-outline-primary:hover {
-  background-color: #0d6efd;
-  color: #fff;
+  background-color: var(--btn-primary-hover-bg);
+  color: var(--btn-primary-hover-text);
 }
 
 .btn-outline-warning:hover {
-  background-color: #ffc107;
-  color: #fff;
-  border-color: #ffc107;
+  background-color: var(--btn-warning-hover-bg);
+  color: var(--btn-warning-hover-text);
+  border-color: var(--btn-warning-hover-bg);
 }
 
 .btn-outline-danger:hover {
-  background-color: #dc3545;
-  color: #fff;
-  border-color: #dc3545;
+  background-color: var(--btn-danger-hover-bg);
+  color: var(--btn-danger-hover-text);
+  border-color: var(--btn-danger-hover-bg);
 }
 
-.card-img-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.card-body .btn-sm {
-  font-size: 0.85rem;
-  padding: 0.35rem 0.5rem;
-  border-radius: 0.5rem;
-}
-
-.card-body .btn-warning i,
-.card-body .btn-danger i,
-.card-body .btn-primary i {
-  margin-right: 4px;
-}
-
+/* =================== SIDEBAR =================== */
 .sidebar-link.active {
-  background-color: #0d6efd;
-  color: #fff !important;
+  background-color: var(--sidebar-active-bg);
+  color: var(--sidebar-active-text) !important;
   border-radius: 8px;
   font-weight: 600;
 }
+
+.card-body .form-control,
+.card-body textarea,
+.card-body select {
+  background-color: var(--select-bg);
+  color: var(--select-text);
+  border: 1px solid var(--select-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+/* Placeholder color */
+.card-body .form-control::placeholder,
+.card-body textarea::placeholder {
+  color: rgba(255, 255, 255, 0.5); /* For dark mode, automatically blends better */
+  transition: color 0.3s ease;
+}
+
+/* Focus state */
+.card-body .form-control:focus,
+.card-body textarea:focus,
+.card-body select:focus {
+  border-color: var(--btn-primary-hover-bg);
+  outline: none;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
+}
+
+/* Labels */
+.card-body .form-label {
+  color: var(--card-text-color);
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+/* =================== MODAL DARK/LIGHT MODE =================== */
+.modal-content {
+  background-color: var(--card-bg);
+  color: var(--card-text-color);
+  border-radius: 16px;
+  transition: background 0.3s, color 0.3s;
+}
+
+/* Modal header */
+.modal-header {
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  color: var(--card-text-color);
+}
+
+/* Modal body */
+.modal-body {
+  background-color: var(--card-body-bg);
+  color: var(--card-text-color);
+}
+
+/* Form labels inside modal */
+.modal-body .form-label {
+  color: var(--card-text-color);
+}
+
+/* Form controls inside modal */
+.modal-body .form-control,
+.modal-body textarea,
+.modal-body select {
+  background-color: var(--select-bg);
+  color: var(--select-text);
+  border: 1px solid var(--select-border);
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+/* Placeholder inside modal */
+.modal-body .form-control::placeholder,
+.modal-body textarea::placeholder {
+  color: rgba(255,255,255,0.5);
+}
+
+/* Focus state inside modal */
+.modal-body .form-control:focus,
+.modal-body textarea:focus,
+.modal-body select:focus {
+  border-color: var(--btn-primary-hover-bg);
+  outline: none;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
+}
+
+/* Modal footer buttons */
+.modal-footer .btn {
+  transition: all 0.3s ease;
+}
+
 </style>
 {% endblock %}

@@ -3,11 +3,13 @@
 {% block title %}Place Order{% endblock %}
 
 {% block content %}
-<div class="container mx-auto p-5 d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+<div class="container d-flex justify-content-center align-items-center p-5" style="min-height: 100vh;">
   <div class="checkout-card rounded-4 p-4 text-center shadow-lg">
-    <h2 class="fw-bold text-gradient mb-3">Checkout</h2>
 
-    <!-- Cart badge -->
+    <!-- Heading -->
+    <h2 class="fw-bold text-gradient mb-4">Checkout</h2>
+
+    <!-- Cart Badge -->
     <div class="mb-4">
       <span class="badge rounded-pill bg-gradient px-3 py-2 fs-6 shadow-sm">
         🛒 Cart Items: {{ cart_count }}
@@ -16,126 +18,168 @@
 
     <!-- Order Total -->
     <div class="glass-box rounded-4 p-4 mb-4">
-      <h3 class="fw-semibold mb-2 text-light">Total: ₹{{ cart_total }}</h3>
+      <h3 class="fw-semibold mb-3 ">Total: ₹{{ cart_total }}</h3>
 
-      <form method="post">
+      <form method="post" autocomplete="off" novalidate>
         {% csrf_token %}
-        <p class="text-secondary small mb-3">Enter credit card details (optional for demo)</p>
+        <p class="text-secondary small mb-3">Enter credit card details (demo only)</p>
 
-        <input
-          type="text"
-          name="name_on_card"
-          placeholder="Name on Card"
-          class="form-control mb-3 rounded-pill input-cool"
-        >
-        <input
-          type="text"
-          name="card_number"
-          placeholder="Card Number"
-          class="form-control mb-3 rounded-pill input-cool"
-        >
+        <!-- Card Name -->
+        <input type="text" name="name_on_card" placeholder="Name on Card"
+               class="form-control mb-3 rounded-pill input-cool" required>
+
+        <!-- Card Number -->
+        <input type="text" name="card_number" placeholder="Card Number"
+               class="form-control mb-3 rounded-pill input-cool" required pattern="\d{16}"
+               title="Enter 16-digit card number">
+
+        <!-- Expiry + CVV -->
         <div class="d-flex gap-3 mb-3">
-          <input
-            type="text"
-            name="expiry"
-            placeholder="MM/YY"
-            class="form-control rounded-pill input-cool"
-          >
-          <input
-            type="text"
-            name="cvv"
-            placeholder="CVV"
-            class="form-control rounded-pill input-cool"
-          >
+          <input type="text" name="expiry" placeholder="MM/YY"
+                 class="form-control rounded-pill input-cool" required pattern="\d{2}/\d{2}"
+                 title="Enter expiry in MM/YY format">
+          <input type="text" name="cvv" placeholder="CVV"
+                 class="form-control rounded-pill input-cool" required pattern="\d{3}"
+                 title="Enter 3-digit CVV">
         </div>
 
-        <button
-          type="submit"
-          class="btn btn-gradient w-100 py-2 fw-semibold rounded-pill shadow-glow"
-        >
+        <!-- Submit Button -->
+        <button type="submit"
+                class="btn btn-gradient w-100 py-2 fw-semibold rounded-pill shadow-glow">
           <i class="bi bi-bag-check me-2"></i> Place Order
         </button>
       </form>
     </div>
+
   </div>
 </div>
+{% endblock %}
 
-<!-- Custom Styles -->
+{% block extra_css %}
 <style>
-  body {
-    background: linear-gradient(160deg, #0f2027, #203a43, #2c5364);
-    color: #eaf6ff;
-    font-family: 'Inter', sans-serif;
-  }
+/* =================== LIGHT MODE VARIABLES =================== */
+:root {
+  /* Page background */
+  --body-bg: #f4f9ff;
+  --text-color: #0a3a4f;
+  --font-family: 'Inter', sans-serif;
+   --text-color: #0a3a4f;           /* default light text */
+  --text-success: #28a745;         /* green for totals */
+  --text-muted: #6c757d;           /
+  --highlight-text: #000000
 
-  /* ✨ Frosted-glass card */
-  .checkout-card {
-  
-    backdrop-filter: blur(18px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-    max-width: 420px;
-    width: 100%;
-    transition: all 0.3s ease;
-  }
+  /* Card */
+  --card-bg: #ffffff;
+  --card-border: rgba(0, 0, 0, 0.08);
+  --card-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  --card-hover-transform: translateY(-2px);
 
-  .checkout-card:hover {
-    transform: translateY(-4px);
-  }
+  /* Gradient text */
+  --gradient-text: linear-gradient(135deg, #0a415a, #0a415a);
 
-  /* 🩵 Gradient text */
-  .text-gradient {
-    background: linear-gradient(135deg, #74ebd5, #acb6e5);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+  /* Badge */
+  --badge-gradient: linear-gradient(135deg, #00b09b, #96c93d);
+  --badge-text: #ffffff;
 
-  /* 🌊 Frosted inner box */
-  .glass-box {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-  }
+  /* Button */
+  --btn-bg: linear-gradient(135deg, #00b09b, #96c93d);
+  --btn-text: #ffffff;
+  --btn-hover-bg: linear-gradient(135deg, #00a88d, #8cc63f);
+  --btn-hover-shadow: 0 4px 12px rgba(0, 176, 155, 0.3);
+}
 
-  /* 🌈 Badge gradient */
-  .bg-gradient {
-    background: linear-gradient(135deg, #00b4db, #0083b0);
-    color: #fff;
-  }
+/* =================== DARK MODE VARIABLES =================== */
+[data-theme="dark"] {
+  --body-bg: #0b1527;
+  --text-color: #ffffff;
+  --text-color: #ffffff;           /* dark mode main text */
+  --text-success: #00ff88;         /* bright green for totals */
+  --text-muted: #bbbbbb;   
+  --highlight-text: #ffffff;
+  --card-bg: rgba(10, 15, 25, 0.95);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-shadow: 0 8px 32px rgba(0, 0, 0, 0.8);
+  --card-hover-transform: translateY(-4px);
 
-  /* 🧊 Inputs */
-  .input-cool {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: #eaf6ff;
-  }
+  --gradient-text: linear-gradient(135deg, #74ebd5, #8aa4ff);
 
-  .input-cool::placeholder {
-    color: #b6c9d6;
-  }
+  --badge-gradient: linear-gradient(135deg, #005f8a, #0099c6);
+  --badge-text: #ffffff;
 
-  .input-cool:focus {
-    background: rgba(255, 255, 255, 0.15);
-    outline: none;
-    box-shadow: 0 0 10px rgba(0, 180, 219, 0.4);
-  }
+  --btn-bg: linear-gradient(135deg, #005f3f, #00875f);
+  --btn-text: #ffffff;
+  --btn-hover-bg: linear-gradient(135deg, #004f33, #006644);
+  --btn-hover-shadow: 0 4px 12px rgba(0, 128, 80, 0.3);
+}
 
-  /* 💠 Gradient button */
-  .btn-gradient {
+/* =================== BODY =================== */
+body {
+  background: var(--body-bg);
+    color: var(--text-color);
+  font-family: var(--font-family);
+  transition: all 0.3s ease;
+}
+.fw-bold.text-success {
+  color: var(--text-success) !important;
+}
 
-    border: none;
-    color: #fff;
-    transition: all 0.3s ease;
-  }
+.text-muted {
+  color: var(--text-muted) !important;
+}
 
-  .btn-gradient:hover {
-    background: linear-gradient(135deg, #0083b0, #00b4db);
-    box-shadow: 0 0 12px rgba(0, 180, 219, 0.6);
-    transform: translateY(-2px);
-  }
+/* =================== CARDS =================== */
+.checkout-card,
+.card,
+.glass-box,
+textarea,
+select,
+input {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  color: var(--text-color);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+.checkout-card .badge,
+.checkout-card .order-total {
+  color: var(--highlight-text);
+}
 
-  .shadow-glow {
-    box-shadow: 0 0 8px rgba(0, 180, 219, 0.3);
-  }
+.checkout-card:hover,
+.card:hover {
+  transform: var(--card-hover-transform);
+}
+
+/* =================== GRADIENT TEXT =================== */
+.text-gradient {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =================== BADGES =================== */
+.bg-gradient {
+  background: var(--badge-gradient);
+  color: var(--badge-text);
+  border-radius: 0.5rem;
+}
+
+/* =================== BUTTONS =================== */
+.btn-gradient {
+  background: var(--btn-bg);
+  border: none;
+  color: var(--btn-text);
+  transition: all 0.3s ease;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+}
+
+.btn-gradient:hover {
+  background: var(--btn-hover-bg);
+  box-shadow: var(--btn-hover-shadow);
+  transform: translateY(-2px);
+}
+
 </style>
 {% endblock %}

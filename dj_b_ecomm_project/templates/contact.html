@@ -6,23 +6,135 @@
 
 {% block extra_css %}
 <style>
-  .contact-section {
-    background-color: #f9f9f9;
-    padding: 60px 0;
-  }
-  .contact-section h2 {
-    text-align: center;
-    font-weight: 700;
-    margin-bottom: 40px;
-  }
-  .form-container {
-    max-width: 600px;
-    margin: 0 auto;
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-  }
+ /* =================== CONTACT SECTION VARIABLES =================== */
+:root {
+  /* Section background & heading */
+  --contact-bg: #f9f9f9;
+  --contact-heading: #1b1b1b;
+
+  /* Form styling */
+  --contact-form-bg: #ffffff;
+  --contact-form-shadow: rgba(0,0,0,0.1);
+  --contact-padding: 60px 0;
+  --contact-form-padding: 30px;
+  --contact-form-radius: 10px;
+  --contact-max-width: 600px;
+  --contact-font-family: "Poppins", sans-serif;
+  --contact-label-color: #1b1b1b;
+
+  /* Inputs & Textareas */
+  --contact-input-bg: #ffffff;
+  --contact-input-text: #1b1b1b;
+  --contact-input-border: #ced4da;
+  --contact-input-placeholder: #6c757d;
+
+  /* Button */
+  --contact-btn-bg: #0d6efd;
+  --contact-btn-text: #ffffff;
+  --contact-btn-hover-bg: #084298;
+  --contact-btn-hover-text: #ffffff;
+
+  /* Focus shadow */
+  --contact-focus-shadow: rgba(13, 110, 253, 0.25);
+}
+
+/* =================== DARK MODE OVERRIDES =================== */
+[data-theme="dark"] {
+  --contact-bg: #0b1527;
+  --contact-heading: #e9eef7;
+  --contact-form-bg: #111a2e;
+  --contact-form-shadow: rgba(255,255,255,0.05);
+
+  --contact-input-bg: #1b1f36;
+  --contact-input-text: #ffffff;
+  --contact-input-border: #2c3150;
+  --contact-input-placeholder: #a0a8c0;
+
+  --contact-btn-bg: #375a7f;
+  --contact-btn-text: #ffffff;
+  --contact-btn-hover-bg: #00c9ff;
+  --contact-btn-hover-text: #000000;
+
+  --contact-focus-shadow: rgba(0, 201, 255, 0.3);
+   --contact-label-color: #ffffff; / 
+}
+
+/* =================== CONTACT SECTION STYLES =================== */
+.contact-section {
+  background-color: var(--contact-bg);
+  padding: var(--contact-padding);
+  
+  transition: background 0.3s, color 0.3s;
+}
+
+.contact-section h2 {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 40px;
+  color: var(--contact-heading);
+  transition: color 0.3s;
+}
+
+.form-container {
+  max-width: var(--contact-max-width);
+  margin: 0 auto;
+  background-color: var(--contact-form-bg);
+  padding: var(--contact-form-padding);
+  border-radius: var(--contact-form-radius);
+  box-shadow: 0 4px 15px var(--contact-form-shadow);
+  transition: background 0.3s, box-shadow 0.3s, color 0.3s;
+}
+
+/* =================== INPUTS & TEXTAREAS =================== */
+.form-container input,
+.form-container textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 15px;
+  border: 1px solid var(--contact-input-border);
+  border-radius: 6px;
+  background-color: var(--contact-input-bg);
+  color: var(--contact-input-text);
+  font-family: var(--contact-font-family);
+  transition: background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.form-container label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+  color: var(--contact-label-color);
+  transition: color 0.3s;
+}
+
+/* Focus state */
+.form-container input:focus,
+.form-container textarea:focus {
+  border-color: var(--contact-btn-bg);
+  outline: none;
+  box-shadow: 0 0 6px var(--contact-focus-shadow);
+}
+
+/* =================== BUTTON =================== */
+.form-container button {
+  background-color: var(--contact-btn-bg);
+  color: var(--contact-btn-text);
+  padding: 0.65rem 1.5rem;
+  border: none;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-container button:hover {
+  background-color: var(--contact-btn-hover-bg);
+  color: var(--contact-btn-hover-text);
+  transform: translateY(-2px);
+}
+
+
+
 </style>
 {% endblock %}
 

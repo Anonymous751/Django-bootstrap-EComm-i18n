@@ -18,7 +18,7 @@
       <div class="row mb-4 text-center">
         <div class="col-12">
           <h2 class="fw-bold">🛍️ {% trans "My Orders" %}</h2>
-          <p class="text-muted">{% trans "View all your past and recent purchases in one place." %}</p>
+          <p class="">{% trans "View all your past and recent purchases in one place." %}</p>
           <hr />
         </div>
       </div>
@@ -43,11 +43,11 @@
               {% if status_data.orders %}
                 {% for order in status_data.orders %}
                   <div class="col-12" id="order-card-{{ order.id }}">
-                    <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
-                      <div class="card-header d-flex justify-content-between align-items-center bg-light">
+                    <div class="card shadow-lg border-0 rounded-4 ">
+                      <div class="card-header d-flex justify-content-between align-items-center">
                         <div>
                           <span class="fw-bold">{% trans "Order" %} #{{ order.id }}</span>
-                          <small class="text-muted ms-2">{{ order.created_at|date:"M d, Y — h:i A" }}</small>
+                          <small class=" ms-2">{{ order.created_at|date:"M d, Y — h:i A" }}</small>
                         </div>
                         <select class="form-select form-select-sm w-auto" onchange="changeStatus({{ order.id }}, this)">
                           <option value="pending" {% if order.status == "pending" %}selected{% endif %}>{% trans "Pending" %}</option>
@@ -290,12 +290,222 @@ function viewProduct(orderId){
 
 {% block extra_css %}
 <style>
-.hover-shadow:hover { transform: translateY(-5px); transition: all 0.3s ease; box-shadow: 0 15px 25px rgba(0,0,0,0.2) !important; }
-.card-body h6 { font-size: 0.95rem; }
-.card-body p { font-size: 0.85rem; }
-.btn-outline-primary, .btn-outline-warning, .btn-outline-danger { font-weight: 500; border-width: 2px; transition: all 0.3s ease; }
-.btn-outline-primary:hover { background-color: #0d6efd; color: white; }
-.btn-outline-warning:hover { background-color: #ffc107; color: black; }
-.btn-outline-danger:hover { background-color: #dc3545; color: white; }
+
+:root {
+  --hover-shadow: 0 15px 25px rgba(0,0,0,0.2);
+
+  --body-bg: #f8f9fa;
+  --body-text: #1b1b1b;
+
+  --card-bg: #ffffff;
+  --card-text: #1b1b1b;
+
+  --select-bg: #ffffff;
+  --select-text: #1b1b1b;
+  --select-border: #ced4da;
+
+  --nav-tabs-bg: #f8f9fa;
+  --nav-link-color: #0a3a4f;
+  --active-bg: #0d6efd;
+  --active-text: #ffffff;
+
+  --btn-primary-hover-bg: #0d6efd;
+  --btn-primary-hover-text: #ffffff;
+
+  --btn-warning-hover-bg: #ffc107;
+  --btn-warning-hover-text: #000000;
+
+  --btn-danger-hover-bg: #dc3545;
+  --btn-danger-hover-text: #ffffff;
+
+    --tab-bg: #f8f9fa;
+  --tab-text: #0a3a4f;
+  --tab-active-bg: #0d6efd;
+  --tab-active-text: #ffffff;
+  /* add this */
+  --modal-heading-text:#000;          /* black title in light mode */
+  --modal-x-filter:invert(0);
+
+}
+
+/* =================== DARK MODE =================== */
+[data-theme="dark"] {
+  --hover-shadow: 0 15px 25px rgba(0,0,0,0.5);
+
+  --body-bg: #0b1527;
+  --body-text: #e9eef7;
+
+  --card-bg: #1b1f36;
+  --card-text: #e9eef7;
+
+  --select-bg: #1b1f36;
+  --select-text: #ffffff;
+  --select-border: #2c3150;
+
+  --nav-tabs-bg: #2c3150;
+  --nav-link-color: #ffffff;
+  --active-bg: #375a7f;
+  --active-text: #ffffff;
+
+  --btn-primary-hover-bg: #375a7f;
+  --btn-primary-hover-text: #ffffff;
+
+  --btn-warning-hover-bg: #e0a800;
+  --btn-warning-hover-text: #000000;
+
+  --btn-danger-hover-bg: #a71d2a;
+  --btn-danger-hover-text: #ffffff;
+
+  /* add modal overrides in dark */
+  --modal-heading-text:#ffffff;
+  --modal-x-filter:invert(1);
+}
+.modal-content {
+  background-color: var(--card-bg) !important;
+  color: var(--card-text) !important;
+}
+/* =================== BODY & CONTAINER =================== */
+body {
+  background-color: var(--body-bg);
+  color: var(--body-text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.card {
+  background-color: var(--card-bg);
+  color: var(--card-text);
+  transition: background 0.3s, color 0.3s;
+}
+
+/* =================== SELECT DYNAMIC =================== */
+.card-header select.form-select {
+  background-color: var(--select-bg);
+  color: var(--select-text);
+  border-color: var(--select-border);
+  transition: all 0.3s ease;
+}
+
+.card-header select.form-select option {
+  background-color: var(--select-bg);
+  color: var(--select-text);
+}
+
+.card-header select.form-select:focus {
+  border-color: var(--select-border);
+  box-shadow: 0 0 0 0.2rem rgba(0,168,181,0.25);
+}
+
+/* =================== HOVER SHADOW =================== */
+.hover-shadow:hover {
+  transform: translateY(-5px);
+  transition: all 0.3s ease;
+  box-shadow: var(--hover-shadow) !important;
+}
+
+/* =================== CARD =================== */
+.card {
+  background-color: var(--card-bg);
+  color: var(--card-text);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.card-body h6 {
+  font-size: 0.95rem;
+}
+
+.card-body p {
+  font-size: 0.85rem;
+}
+
+/* =================== OUTLINE BUTTONS =================== */
+.btn-outline-primary,
+.btn-outline-warning,
+.btn-outline-danger {
+  font-weight: 500;
+  border-width: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Primary button hover */
+.btn-outline-primary:hover {
+  background-color: var(--btn-primary-hover-bg);
+  color: var(--btn-primary-hover-text);
+}
+
+/* Warning button hover */
+.btn-outline-warning:hover {
+  background-color: var(--btn-warning-hover-bg);
+  color: var(--btn-warning-hover-text);
+}
+
+/* Danger button hover */
+.btn-outline-danger:hover {
+  background-color: var(--btn-danger-hover-bg);
+  color: var(--btn-danger-hover-text);
+}
+
+/* =================== ADDITIONAL UTILITY =================== */
+/* Example: make search button dynamic */
+form.d-flex .btn {
+  background-color: var(--card-bg);
+  color: var(--card-text);
+  border: 2px solid var(--card-text);
+  transition: all 0.3s ease;
+}
+
+form.d-flex .btn:hover {
+  background-color: var(--btn-primary-hover-bg);
+  color: var(--btn-primary-hover-text);
+  border-color: var(--btn-primary-hover-bg);
+}
+.nav-tabs {
+    background-color: var(--nav-tabs-bg) !important;
+}
+
+.nav-tabs .nav-link {
+    color: var(--nav-link-color) !important;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: var(--active-bg) !important;
+    color: var(--active-text) !important;
+}
+
+.nav-tabs .nav-link:hover {
+    background-color: var(--nav-tabs-bg) !important;
+    color: var(--nav-link-color) !important;
+}
+.nav-pills .nav-link {
+    background-color: var(--tab-bg) !important;
+    color: var(--tab-text) !important;
+    transition: all 0.3s ease;
+    border-radius: 0.5rem;
+    margin: 0 0.25rem;
+}
+
+.nav-pills .nav-link.active {
+    background-color: var(--tab-active-bg) !important;
+    color: var(--tab-active-text) !important;
+}
+
+.nav-pills .nav-link:hover:not(.active) {
+    background-color: var(--tab-bg) !important;
+    color: var(--tab-text) !important;
+}
+
+/* =================== MODAL FIXES =================== */
+.modal-title {
+  color: var(--modal-heading-text) !important;
+}
+
+.btn-close {
+  filter: invert(0);
+}
+
+[data-theme="dark"] .btn-close {
+  filter: invert(1);
+}
 </style>
 {% endblock %}

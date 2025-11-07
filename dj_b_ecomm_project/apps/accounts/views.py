@@ -14,14 +14,24 @@ import random
 from django.conf import settings
 from typing import cast
 
+from django.contrib.auth.tokens import default_token_generator
+from django.template.loader import render_to_string
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMessage
+from django.urls import reverse
+
+from django.core.mail import EmailMultiAlternatives
 
 def register_view(request):
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            user = form.save()   # don't save yet  commit=False
+            # user.is_active = False           # <-- important
+            user.save()        
             messages.success(request, "Account created successfully! Please login.")
-            return redirect('login')
+            return redirect('accounts:login')
     else:
         form = UserRegistrationForm()
     return render(request, 'accounts/register.html', {'form': form})
@@ -77,6 +87,14 @@ def admin_settings_view(request):
     user = request.user
 
     if request.method == "POST":
+        dark_mode = request.POST.get("dark_mode") == "on"
+        request.user.dark_mode = dark_mode
+
+        # Update analytics level
+        analytics_level = request.POST.get("analytics_level", "Basic")
+        request.user.analytics_level = analytics_level
+        
+        
         # Profile updates
         if "first_name" in request.POST:
             user.first_name = request.POST.get("first_name")
@@ -129,6 +147,15 @@ def admin_settings_view(request):
             user.is_private = True
         else:
             user.is_private = False
+
+        # 🌓 Dark mode update  <<--- ADDED
+        user.dark_mode = True if request.POST.get("dark_mode") else False
+
+        # 📊 Dashboard level update  <<--- ADDED
+        analytics_level = request.POST.get("analytics_level")
+        if analytics_level in ["Basic", "Advanced", "Professional"]:
+            user.analytics_level = analytics_level
+
         user.save()
 
         messages.success(request, "Settings updated successfully!")
@@ -150,7 +177,7 @@ def profile_view(request, username):
     # 🚫 Restrict private profiles for non-superusers
     if profile_user.is_private and request.user != profile_user:
         messages.warning(request, "🚫 This account is private.")
-        return redirect("dashboard")
+        return redirect("accounts:dashboard")
 
     # 👩‍💼 Staff logic: can view staff + active normal users
     if request.user.is_staff:
@@ -160,7 +187,7 @@ def profile_view(request, username):
             or request.user == profile_user
         ):
             messages.warning(request, "🚫 Staff can only view staff or active user profiles.")
-            return redirect("dashboard")
+            return redirect("accounts:dashboard")
 
     # 👤 Normal user logic: can view only active, normal users (non-staff, non-superuser)
     elif not request.user.is_staff and not request.user.is_superuser:
@@ -355,7 +382,7 @@ def verify_reset_otp_view(request):
 
     if not email:
         messages.error(request, "Session expired. Please try again.")
-        return redirect("forgot_password")
+        return redirect("accounts:forgot_password")
 
     if request.method == "POST":
         otp = request.POST.get("otp")
@@ -404,3 +431,79 @@ def reset_password_view(request):
             return redirect("login")
 
     return render(request, "accounts/reset_password.html")
+
+
+
+
+# def send_verification_email(request, user):
+#     token = default_token_generator.make_token(user)
+#     uid = urlsafe_base64_encode(force_bytes(user.pk))
+#     verify_url = request.build_absolute_uri(
+#         reverse('activate', kwargs={'uidb64': uid, 'token': token})
+#     )
+
+#     subject = 'Verify your ShopEase account'
+#     context = {
+#         'user': user,
+#         'verify_url': verify_url,
+#         'site_name': 'ShopEase',
+#     }
+
+#     message_html = render_to_string('emails/verify_email.html', context)
+#     message_plain = render_to_string('emails/verify_email.txt', context)
+
+#     # === FIX IS HERE ===
+#     email = EmailMultiAlternatives(
+#         subject,
+#         message_plain,
+#         settings.DEFAULT_FROM_EMAIL,
+#         [user.email],
+#     )
+
+#     email.attach_alternative(message_html, "text/html")
+#     email.send(fail_silently=False)
+
+
+# def activate_account(request, uidb64, token):
+#     try:
+#         uid = force_str(urlsafe_base64_decode(uidb64))
+#         user = User.objects.get(pk=uid)
+#     except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+#         user = None
+
+#     if user is not None and default_token_generator.check_token(user, token):
+#         # Activate user account (customize per your model)
+#         user.is_active = True
+#         user.save()
+#         messages.success(request, "Your account has been verified. You can log in now.")
+#         return redirect('accounts:login')  # adjust to your login URL name
+#     else:
+#         messages.error(request, "The verification link is invalid or expired.")
+#         return redirect('home')
+
+
+@login_required
+def advanced_analytics(request):
+    return render(request, "accounts/advanced_analytics.html")
+
+
+@login_required
+def sales_report(request):
+    return render(request, "accounts/sales_report.html")
+
+@login_required
+def user_traffic(request):
+    return render(request, "accounts/user_traffic.html")
+
+@login_required
+def ai_predictions(request):
+    return render(request, "accounts/ai_predictions.html")
+
+
+
+# Theme View 
+@login_required
+def toggle_dark_mode(request):
+    request.user.dark_mode = not request.user.dark_mode
+    request.user.save()
+    return redirect(request.META.get('HTTP_REFERER', 'home'))

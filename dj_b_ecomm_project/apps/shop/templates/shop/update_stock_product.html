@@ -68,45 +68,154 @@
 
 {% block extra_css %}
 <style>
+//* =================== GLOBAL VARIABLES =================== */
+:root {
+  /* Body & container */
+  --body-bg: #ffffff;
+  --body-text-color: #1b1b1b;
+  --container-bg: #ffffff;
+
+  /* Button hover */
+  --hover-btn-translate: -2px;
+
+  --btn-success-bg: #28a745;
+  --btn-success-text: #ffffff;
+
+  --btn-outline-secondary-bg: #6c757d;
+  --btn-outline-secondary-text: #ffffff;
+  --btn-outline-secondary-border: #6c757d;
+
+  /* Card */
+  --card-bg: #ffffff;
+  --card-hover-bg: #f8f9fa;
+  --card-body-bg: #ffffff;
+  --card-text-color: #1b1b1b;
+
+  /* Card image hover */
+  --card-img-hover-scale: 1.03;
+
+  /* Card header & form labels */
+  --card-header-h4-color: #1b1b1b;
+  --form-label-color: #1b1b1b;
+  --text-danger-color: #dc3545;
+
+  /* Form control */
+  --form-control-border-radius: 0.5rem;
+  --form-control-padding: 0.5rem;
+
+  /* Links */
+  --link-color: #0d6efd;
+}
+
+/* =================== DARK MODE OVERRIDES =================== */
+[data-theme="dark"] {
+  --body-bg: #0b1527;
+  --body-text-color: #ffffff;
+  --container-bg: #111a2e;
+  --link-color: #00c9ff;
+
+  --btn-success-bg: #28a745;
+  --btn-success-text: #ffffff;
+
+  --btn-outline-secondary-bg: #495057;
+  --btn-outline-secondary-text: #ffffff;
+  --btn-outline-secondary-border: #495057;
+
+  /* Cards dark mode */
+  --card-bg: #1b1f36;
+  --card-hover-bg: #2c3150;
+  --card-body-bg: #1b1f36;
+  --card-text-color: #ffffff;
+
+  --card-header-h4-color: #ffffff;
+  --form-label-color: #ffffff;
+  --text-danger-color: #ff6b6b;
+}
+
+/* =================== BODY & CONTAINER =================== */
+body {
+  background-color: var(--body-bg);
+  color: var(--body-text-color);
+  transition: background 0.3s, color 0.3s;
+}
+
+.container {
+  background-color: var(--container-bg);
+  transition: background 0.3s;
+}
+
+a {
+  color: var(--link-color);
+}
+
+/* =================== BUTTON HOVER =================== */
 .hover-btn:hover {
-  transform: translateY(-2px);
+  transform: translateY(var(--hover-btn-translate));
   transition: all 0.3s ease;
 }
 
 .btn-success.hover-btn:hover {
-  background-color: #28a745;
-  color: #fff;
+  background-color: var(--btn-success-bg);
+  color: var(--btn-success-text);
 }
 
 .btn-outline-secondary.hover-btn:hover {
-  background-color: #6c757d;
-  color: #fff;
-  border-color: #6c757d;
+  background-color: var(--btn-outline-secondary-bg);
+  color: var(--btn-outline-secondary-text);
+  border-color: var(--btn-outline-secondary-border);
 }
 
+/* =================== CARD STYLES =================== */
+.card {
+  background-color: var(--card-bg);
+  color: var(--card-text-color);
+  border-radius: 0.75rem;
+  border: none;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  background-color: var(--card-hover-bg);
+}
+
+.card-body {
+  background-color: var(--card-body-bg);
+  transition: background 0.3s, color 0.3s;
+}
+
+/* =================== CARD IMAGE =================== */
 .card-body img {
   transition: all 0.3s ease;
 }
 
 .card-body img:hover {
-  transform: scale(1.03);
+  transform: scale(var(--card-img-hover-scale));
 }
 
+/* =================== CARD TEXT =================== */
 .card-header h4 {
   font-weight: 600;
+  color: var(--card-header-h4-color);
 }
 
 .card-body .form-label {
   font-weight: 500;
+  color: var(--form-label-color);
 }
 
 .card-body .form-control {
-  border-radius: 0.5rem;
-  padding: 0.5rem;
+  border-radius: var(--form-control-border-radius);
+  padding: var(--form-control-padding);
+  background-color: var(--card-body-bg);
+  color: var(--card-text-color);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .card-body .text-danger {
   font-size: 0.85rem;
+  color: var(--text-danger-color);
 }
+
 </style>
 {% endblock %}

@@ -2,11 +2,11 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_POST
 from apps.cart.models import CartItem
-from .models import Product
+from .models import Product, Review
 from django.shortcuts import render, redirect
 from .forms import ProductForm
 from django.contrib import messages
-
+from django.contrib.auth.decorators import login_required
 
 def add_to_cart(request):
     if not request.user.is_authenticated:
@@ -216,7 +216,53 @@ def delete_stock_product_view(request, pk):
 
 def stock_product_detail_view(request, pk):
     product = get_object_or_404(Product, pk=pk)
+
+    # Handle review form submission
+    if request.method == "POST":
+        if request.user.is_authenticated:
+            rating = request.POST.get("rating", 5)
+            comment = request.POST.get("comment", "")
+            if comment.strip():  # optional: only save if comment is not empty
+                Review.objects.create(
+                    product=product,
+                    user=request.user,
+                    rating=rating,
+                    comment=comment
+                )
+            return redirect('stock_product_detail', pk=product.pk)
+        else:
+            return redirect('accounts:login')  # or your login URL
+
     context = {
         'product': product
     }
     return render(request, 'shop/stock_product_detail.html', context)
+
+
+
+@login_required
+def like_review(request, pk):
+    review = get_object_or_404(Review, pk=pk)
+    user = request.user
+
+    if user in review.likes.all():
+        review.likes.remove(user)  # remove like (toggle)
+    else:
+        review.likes.add(user)
+        review.dislikes.remove(user)  # remove dislike if any
+
+    return redirect('stock_product_detail', pk=review.product.pk)
+
+
+@login_required
+def dislike_review(request, pk):
+    review = get_object_or_404(Review, pk=pk)
+    user = request.user
+
+    if user in review.dislikes.all():
+        review.dislikes.remove(user)
+    else:
+        review.dislikes.add(user)
+        review.likes.remove(user)  # remove like if any
+
+    return redirect('stock_product_detail', pk=review.product.pk)

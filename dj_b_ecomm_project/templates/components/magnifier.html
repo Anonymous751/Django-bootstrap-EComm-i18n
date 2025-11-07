@@ -1,0 +1,103 @@
+{# templates/components/magnifier.html - drop into templates/components/ #}
+
+<!-- Magnifier styles + container (no block tags, safe to include anywhere) -->
+<style>
+  #zoomWindow {
+    width: 300px;
+    height: 300px;
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    border: 2px solid #ddd;
+    background-repeat: no-repeat;
+    background-size: 200% 200%;
+    background-position: center;
+    display: none;
+    z-index: 9999;
+    background-color: #fff;
+    border-radius: 6px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+  }
+
+  /* responsive: hide on smaller screens */
+  @media (max-width: 1200px) {
+    #zoomWindow { display: none !important; }
+  }
+
+  /* small tweak: pointer cursor when hovering images */
+  .zoomSrc { cursor: zoom-in; }
+</style>
+
+<!-- container; we'll ensure it's appended to body if include placed elsewhere -->
+<div id="zoomWindow" aria-hidden="true"></div>
+
+<script>
+(function () {
+  // only run on non-touch hover-capable devices
+  const supportsHover = window.matchMedia && window.matchMedia('(hover: hover)').matches;
+  if (!supportsHover) return;
+
+  // ensure zoomWindow exists and is appended to body (avoids include placement issues)
+  let zoomWindow = document.getElementById('zoomWindow');
+  if (!zoomWindow) {
+    zoomWindow = document.createElement('div');
+    zoomWindow.id = 'zoomWindow';
+    document.body.appendChild(zoomWindow);
+  } else if (zoomWindow.parentElement !== document.body) {
+    document.body.appendChild(zoomWindow);
+  }
+
+  // Utility: set background safely
+  function showZoom(img, e) {
+    if (!img || !img.src) return;
+    const rect = img.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return;
+    // Set bg image once
+    if (zoomWindow.style.backgroundImage !== `url("${img.src}")` && zoomWindow.style.backgroundImage !== `url(${img.src})`) {
+      zoomWindow.style.backgroundImage = `url(${img.src})`;
+    }
+    // compute position
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    const clamp = v => Math.max(0, Math.min(100, v));
+    zoomWindow.style.backgroundPosition = `${clamp(x)}% ${clamp(y)}%`;
+    zoomWindow.style.display = 'block';
+  }
+
+  function hideZoom() {
+    zoomWindow.style.display = 'none';
+  }
+
+  // Delegate: handle mousemove & enter/leave for any element matching .zoomSrc
+  // This works with dynamically added images (Swiper, lazy load, etc.)
+  document.addEventListener('mouseover', function (e) {
+    const target = e.target;
+    if (target && target.matches && target.matches('.zoomSrc')) {
+      // on entering image, ensure background is set (mousemove handler will update)
+      // attach mousemove and mouseleave listeners to this image (remove on leave)
+      const onMove = function (ev) { showZoom(target, ev); };
+      const onLeave = function () {
+        hideZoom();
+        target.removeEventListener('mousemove', onMove);
+        target.removeEventListener('mouseleave', onLeave);
+        target.removeEventListener('mouseout', onLeave);
+      };
+      target.addEventListener('mousemove', onMove);
+      target.addEventListener('mouseleave', onLeave);
+      target.addEventListener('mouseout', onLeave);
+    }
+  });
+
+  // Safety: hide zoom when user scrolls or resizes a lot
+  let lastScroll = window.scrollY;
+  window.addEventListener('scroll', function () {
+    const cur = window.scrollY;
+    if (Math.abs(cur - lastScroll) > 100) hideZoom();
+    lastScroll = cur;
+  });
+  window.addEventListener('resize', hideZoom);
+
+  // Also hide if user starts dragging the image / slides change
+  document.addEventListener('dragstart', hideZoom);
+})();
+</script>

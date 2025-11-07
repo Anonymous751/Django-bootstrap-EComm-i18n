@@ -10,74 +10,138 @@
       rel="stylesheet"
     />
     <style>
-      footer {
-        background-color: #083a4f;
-        color: #f8f9fa;
-        padding-top: 50px;
-        font-family: "Poppins", sans-serif;
-      }
+     /* =================== FOOTER VARIABLES =================== */
+:root {
+  --footer-bg: #083a4f;
+  --footer-text: #f8f9fa;
+  --footer-heading: #00c6ff;
+  --footer-link: #dbe9f4;
+  --footer-link-hover: #00c6ff;
+  --social-bg: #0a607d;
+  --social-hover-bg: #00c6ff;
+  --social-hover-text: #083a4f;
+  --footer-bottom-bg: #072f40;
+  --footer-bottom-text: #cbd5e1;
+  --footer-font-family: "Poppins", sans-serif;
+}
 
-      footer h6 {
-        font-weight: 600;
-        text-transform: uppercase;
-        margin-bottom: 20px;
-        color: #00c6ff;
-        letter-spacing: 1px;
-      }
+/* Dark mode overrides */
+[data-theme="dark"] {
+  --footer-bg: #111a2e;
+  --footer-text: #e9eef7;
+  --footer-heading: #92fe9d;
+  --footer-link: #cfd8dc;
+  --footer-link-hover: #92fe9d;
+  --social-bg: #1b2a40;
+  --social-hover-bg: #92fe9d;
+  --social-hover-text: #0b1527;
+  --footer-bottom-bg: #0b1527;
+  --footer-bottom-text: #b0bec5;
+}
 
-      footer p,
-      footer a {
-        color: #dbe9f4;
-        font-size: 0.95rem;
-      }
+/* =================== FOOTER STYLES =================== */
+footer {
+  background-color: var(--footer-bg);
+  padding-top: 50px;
+  transition: background 0.3s, color 0.3s;
+}
 
-      footer a {
-        text-decoration: none;
-        transition: color 0.3s ease;
-      }
+footer h6 {
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+  color: var(--footer-heading);  /* <-- add this */
+}
 
-      footer a:hover {
-        color: #00c6ff;
-      }
+footer p,
+footer a {
+  color: var(--footer-link);
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+}
 
-      .social-icons a {
-        display: inline-block;
-        width: 40px;
-        height: 40px;
-        line-height: 40px;
-        background: #0a607d;
-        border-radius: 50%;
-        color: white;
-        margin-right: 10px;
-        transition: all 0.3s ease;
-      }
+footer a {
+  text-decoration: none;
+}
 
-      .social-icons a:hover {
-        background: #00c6ff;
-        color: #083a4f;
-        transform: translateY(-3px);
-      }
+footer a:hover {
+  color: var(--footer-link-hover);
+}
 
-      .footer-bottom {
-        background: #072f40;
-        color: #cbd5e1;
-        text-align: center;
-        padding: 15px 0;
-        font-size: 0.9rem;
-        margin-top: 30px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-      }
+.social-icons a {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  background: var(--social-bg);
+  border-radius: 50%;
+  color: var(--footer-text);
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
 
-      @media (max-width: 767px) {
-        footer .col-md-4 {
-          text-align: center;
-          margin-bottom: 25px;
-        }
+.social-icons a:hover {
+  background: var(--social-hover-bg);
+  color: var(--social-hover-text);
+  transform: translateY(-3px);
+}
 
-        .social-icons {
-          justify-content: center;
-        }
-      }
+.footer-bottom {
+  background: var(--footer-bottom-bg);
+  color: var(--footer-bottom-text);
+  text-align: center;
+  padding: 15px 0;
+  font-size: 0.9rem;
+  margin-top: 30px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background 0.3s, color 0.3s;
+}
+
+/* =================== RESPONSIVE =================== */
+@media (max-width: 767px) {
+  footer .col-md-4 {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+[data-theme="dark"] {
+  --footer-heading: #ffffff;
+}
+
+/* ================= FOOTER SOCIAL ICONS ================= */
+.social-icons {
+  display: flex;
+  justify-content: center; /* centers icons horizontally */
+  align-items: center;
+  gap: 10px; /* space between icons */
+  margin-top: 15px; /* optional spacing from text above */
+}
+
+/* Individual icons */
+.social-icons a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 40px;
+  height: 40px;
+  background: var(--social-bg);
+  border-radius: 50%;
+  color: var(--footer-text);
+  transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+  background: var(--social-hover-bg);
+  color: var(--social-hover-text);
+  transform: translateY(-3px);
+}
+
     </style>
   </head>
 
@@ -103,11 +167,11 @@
           <div class="col-md-4 mb-4">
             <h6>{% trans "Follow Us" %}</h6>
             <div class="social-icons d-flex">
-              <a href="#"><i class="fab fa-facebook-f"></i></a>
-              <a href="#"><i class="fab fa-twitter"></i></a>
-              <a href="#"><i class="fab fa-instagram"></i></a>
-              <a href="#"><i class="fab fa-linkedin-in"></i></a>
-              <a href="#"><i class="fab fa-youtube"></i></a>
+              <a href="https://www.facebook.com/"><i class="fab fa-facebook-f"></i></a>
+              <a href="https://x.com/i/flow/login"><i class="fab fa-twitter"></i></a>
+              <a href="https://www.instagram.com/"><i class="fab fa-instagram"></i></a>
+              <a href="https://www.linkedin.com/"><i class="fab fa-linkedin-in"></i></a>
+              <a href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
             </div>
           </div>
         </div>

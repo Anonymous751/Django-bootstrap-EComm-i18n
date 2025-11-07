@@ -2,10 +2,13 @@
 {% load static %}
 {% load i18n %}
 
-<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #083a4f;">
+<nav class="navbar navbar-expand-lg navbar-dark">
   <div class="container-fluid">
+
+    {# ===== LOGO ===== #}
     <a class="navbar-brand" href="{% url 'home' %}">{% trans "ShopEase" %}</a>
 
+    {# ===== TOGGLER ===== #}
     <button
       class="navbar-toggler"
       type="button"
@@ -18,57 +21,43 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
+    {# ===== COLLAPSIBLE CONTENT ===== #}
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+      {# ===== NAV LINKS ===== #}
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a
-            class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}"
-            href="{% url 'home' %}"
-          >
-            {% trans "Home" %}
-          </a>
+          <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">{% trans "Home" %}</a>
         </li>
         <li class="nav-item">
-          <a
-            class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}"
-            href="{% url 'about' %}"
-          >
-            {% trans "About" %}
-          </a>
+          <a class="nav-link {% if request.resolver_match.url_name == 'about' %}active{% endif %}" href="{% url 'about' %}">{% trans "About" %}</a>
         </li>
         <li class="nav-item">
-          <a
-            class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}"
-            href="{% url 'contact' %}"
-          >
-            {% trans "Contact" %}
-          </a>
+          <a class="nav-link {% if request.resolver_match.url_name == 'contact' %}active{% endif %}" href="{% url 'contact' %}">{% trans "Contact" %}</a>
         </li>
       </ul>
 
-      <form class="d-flex me-3" role="search" action="{% url 'home' %}" method="get">
-        <input
-          class="form-control me-2 search-input"
-          type="search"
-          name="search"
-          placeholder="{% trans 'Search product by name & category...' %}"
-          value="{{ search_query|default:'' }}"
-          aria-label="{% trans 'Search' %}"
-        />
-        <button class="btn btn-outline-light" type="submit">
-          {% trans "Search" %}
-        </button>
-      </form>
+      {# ===== SEARCH FORM ===== #}
+      <div class="search-row d-flex w-100 justify-content-center mb-2">
+        <form class="d-flex w-100" role="search" action="{% url 'home' %}" method="get">
+          <input
+            class="form-control me-2 search-input"
+            type="search"
+            name="search"
+            placeholder="{% trans 'Search product by name & category...' %}"
+            value="{{ search_query|default:'' }}"
+            aria-label="{% trans 'Search' %}"
+          />
+          <button class="btn" type="submit">{% trans "Search" %}</button>
+        </form>
+      </div>
 
-      <ul class="navbar-nav mb-2 mb-lg-0">
-        <!-- Cart -->
-        <li class="nav-item me-3">
-          <a
-            class="nav-link position-relative"
-            href="#"
-            data-bs-toggle="modal"
-            data-bs-target="#cartModal"
-          >
+      {# ===== ACTIONS ROW: CART + DARK/LIGHT + ACCOUNT ===== #}
+      <div class="action-row d-flex align-items-center gap-2">
+
+        {# CART BUTTON #}
+        <li class="nav-item me-3 list-unstyled" id="cart-btn">
+          <a class="nav-link position-relative" href="#" data-bs-toggle="modal" data-bs-target="#cartModal">
             <i class="fas fa-shopping-cart fa-lg"></i>
             <span
               id="cart-badge"
@@ -81,9 +70,23 @@
           </a>
         </li>
 
-        <!-- Account -->
+        {# DARK / LIGHT MODE TOGGLE #}
         {% if request.user.is_authenticated %}
-        <li class="nav-item dropdown">
+        <li class="nav-item list-unstyled" id="theme-toggle">
+          <button onclick="window.location.href='{% url 'accounts:toggle_dark_mode' %}'"
+                  class="nav-link bg-transparent border-0">
+              {% if request.user.dark_mode %}
+                  🌞 Light
+              {% else %}
+                  🌙 Dark
+              {% endif %}
+          </button>
+        </li>
+        {% endif %}
+
+        {# ACCOUNT DROPDOWN #}
+        <li class="nav-item dropdown list-unstyled">
+          {% if request.user.is_authenticated %}
           <a
             class="nav-link dropdown-toggle d-flex align-items-center"
             href="#"
@@ -102,46 +105,23 @@
             {{ request.user.display_name }}
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-            <li>
-              <a class="dropdown-item" href="{% url 'accounts:dashboard' %}">
-                {% trans "Dashboard" %}
-              </a>
-            </li>
+            <li><a class="dropdown-item" href="{% url 'accounts:dashboard' %}">{% trans "Dashboard" %}</a></li>
             <li><hr class="dropdown-divider" /></li>
-            <li>
-              <a class="dropdown-item" href="{% url 'accounts:logout' %}">
-                {% trans "Logout" %}
-              </a>
-            </li>
+            <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">{% trans "Logout" %}</a></li>
           </ul>
-        </li>
-        {% else %}
-        <li class="nav-item dropdown">
-          <a
-            class="nav-link dropdown-toggle"
-            href="#"
-            id="accountDropdown"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
+          {% else %}
+          <a class="nav-link dropdown-toggle" href="#" id="accountDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             {% trans "Account" %}
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
-            <li>
-              <a class="dropdown-item" href="{% url 'accounts:login' %}">
-                {% trans "Login" %}
-              </a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="{% url 'accounts:register' %}">
-                {% trans "Register" %}
-              </a>
-            </li>
+            <li><a class="dropdown-item" href="{% url 'accounts:login' %}">{% trans "Login" %}</a></li>
+            <li><a class="dropdown-item" href="{% url 'accounts:register' %}">{% trans "Register" %}</a></li>
           </ul>
+          {% endif %}
         </li>
-        {% endif %}
-      </ul>
+
+      </div>
+
     </div>
   </div>
 </nav>
@@ -149,140 +129,343 @@
 <!-- 🛍️ Cart Modal -->
 {% include "components/cart_modal.html" %}
 
+
+
 {% block extra_css %}
 <style>
-  /* Keep layout stable when translated text becomes longer */
+
+ /* ================= CSS VARIABLES ================= */
+:root {
+  /* Navbar */
+  --navbar-bg: #083a4f;
+  --navbar-text: #ffffff;
+  --navbar-hover: #ffc107;
+  --logo-color: #ffffff; 
+
+  /* Body / Page */
+  --body-bg: #ffffff;
+  --text-color: #1b1b1b;
+
+  /* Buttons */
+  --btn-outline-border: #673ab7;
+  --btn-outline-text: #083a4f;
+  --btn-outline-hover-bg: linear-gradient(90deg, #B721FF, #FF0066);
+  --btn-outline-hover-text: #ffffff;
+
+  /* Inputs */
+  --input-bg: #ffffff;
+  --input-border: #673ab7;
+  --focus-ring: rgba(103, 58, 183, 0.35);
+  --focus-border: #ff4081;
+
+  /* Cart badge */
+  --cart-badge-bg: #dc3545;
+
+  /* Dropdown / hover */
+  --dropdown-hover-bg: #083a4f;
+  --dropdown-hover-text: #ffffff;
+
+  /* Search input width */
+  --search-min-width: 400px;
+  --search-max-width: 700px;
+
+  --cart-title-color: #ffffff;
+  --search-btn-text-color: #083a4f;
+
+}
+
+/* ================= DARK MODE ================= */
+[data-theme="dark"] {
+  --navbar-bg: #111a2e;
+  --navbar-text: #e9eef7;
+  --navbar-hover: #ffc107;
+
+  --body-bg: #0b1527;
+  --text-color: #e9eef7;
+
+  --btn-outline-border: linear-gradient(90deg, #00C9FF, #92FE9D);
+  --btn-outline-text: #ffffff;
+  --btn-outline-hover-bg: linear-gradient(90deg, #00C9FF, #92FE9D);
+  --btn-outline-hover-text: #ffffff;
+
+  --input-bg: #0f1b2f;
+  --input-border: linear-gradient(90deg, #00C9FF, #92FE9D);
+  --focus-ring: rgba(255, 64, 129, 0.4);
+  --focus-border: #ff4081;
+
+  --cart-badge-bg: #ff4081;
+  --dropdown-hover-bg: #1f2a48;
+  --dropdown-hover-text: #ffffff;
+   --welcome-text-color: #673ab7;
+  --search-btn-text-color: #673ab7;
+}
+
+/* ================= NAVBAR ================= */
+.navbar,
+.custom-navbar {
+  background-color: var(--navbar-bg) !important;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+
+
+.navbar-brand:hover {
+  color: var(--navbar-hover) !important;
+}
+
+.nav-link {
+  color: var(--navbar-text) !important;
+  font-weight: 500;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.nav-link:hover,
+.nav-link.active {
+  color: var(--navbar-hover) !important;
+  transform: translateY(-1px);
+}
+
+/* ================= SEARCH INPUT ================= */
+/* ================= SEARCH INPUT SMALLER HEIGHT ================= */
+.search-input {
+  padding: 4px 12px;         /* reduce height */
+  border-radius: 6px;        /* slightly smaller radius */
+  height: 40px;              /* fixed height */
+  line-height: 1.2;
+  display: flex;
+  align-items: center;       /* vertical center text */
+  border: 2px solid var(--input-border);
+  background-color: var(--input-bg);
+  transition: 0.25s ease;
+}
+
+.search-input::placeholder {
+  color: var(--text-color);
+  opacity: 0.6;
+  line-height: 1.2;
+}
+
+
+.search-input:focus {
+  box-shadow: 0 0 0 3px var(--focus-ring);
+  border-color: var(--focus-border);
+}
+
+
+
+
+/* ================= SEARCH BUTTON HEIGHT ALIGN ================= */
+form.d-flex {
+  display: flex;
+  align-items: center;  /* vertical center input and button */
+  gap: 0.3rem;          /* space between input and button */
+  width: 100%;
+}
+  
+form.d-flex .btn {
+  height: 36px;              /* match input height */
+  padding: 0 12px;           /* horizontal padding */
+  display: flex;
+  align-items: center;       /* center text vertically */
+  justify-content: center;   /* center text horizontally */
+  background-color: #ffffff !important;
+  border: 2px solid #000000 !important;
+  transition: all 0.3s ease;
+}
+
+form.d-flex .btn:hover {
+  background-color: #f0f0f0 !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+
+/* ================= OUTLINE BUTTON ================= */
+.btn-outline-light {
+  border: 2px solid var(--btn-outline-border) !important;
+  background: transparent !important;
+  transition: all 0.3s ease;
+  min-width: 90px;
+  font-weight: 600;
+}
+
+.btn-outline-light:hover {
+  background-color: #ff4081 !important;
+  color: #ffffff !important;
+  border-color: #ff4081 !important;
+}
+
+/* ================= DROPDOWN ================= */
+.dropdown-menu {
+  margin-right : 15px;
+  border: none;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  max-width: 250px;
+  word-wrap: break-word;
+}
+
+.dropdown-item:hover {
+  background-color: var(--dropdown-hover-bg);
+  color: var(--dropdown-hover-text);
+}
+
+/* ================= CART BADGE ================= */
+#cart-badge {
+  background-color: var(--cart-badge-bg);
+  font-size: 0.7rem;
+}
+
+/* ================= GENERAL ================= */
+.navbar-nav .nav-link,
+.navbar-brand,
+.dropdown-item,
+.btn {
+  white-space: nowrap;
+}
+
+form.d-flex {
+  flex-wrap: nowrap;
+  gap: 0.3rem;
+  width: 100%;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width: 991px) {
   .navbar-nav .nav-link,
-  .navbar-brand,
-  .dropdown-item,
-  .btn {
-    white-space: nowrap;
+  .dropdown-item {
+    white-space: normal;
+    text-align: center;
   }
 
-  /* Prevent overflow and keep dropdown from stretching */
-  .dropdown-menu {
-    max-width: 250px;
-    word-wrap: break-word;
-  }
-
-  /* Handle long placeholder text */
-  .search-input::placeholder {
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-
-  /* Search box constraints */
-  .search-input {
-    min-width: 180px;
-    max-width: 260px;
-  }
-
-  /* Base responsive layout */
-  form.d-flex {
-    flex-wrap: nowrap;
-    gap: 0.3rem;
+  .navbar-nav .dropdown-menu {
     width: 100%;
+    left: 0 !important;
+    right: 0 !important;
+    text-align: center;
   }
 
-  .search-input {
-    min-width: 0;
+  /* ===== MOVE SEARCH TO TOP ===== */
+  .search-row {
+    order: -1; /* moves to top */
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+  }
+
+  .search-row .search-input {
+    min-width: 100%;
     max-width: 100%;
+    font-size: 0.95rem;
   }
 
   form.d-flex .btn {
-    flex-shrink: 0;
-    white-space: nowrap;
+    font-size: 0.9rem;
+    padding: 0.35rem 0.75rem;
   }
 
-  /* Mobile fixes */
-  @media (max-width: 991px) {
-    .navbar-nav .nav-link,
-    .dropdown-item {
-      white-space: normal;
-      text-align: center;
-    }
-
-    .navbar-nav .dropdown-menu {
-      width: 100%;
-      left: 0 !important;
-      right: 0 !important;
-      text-align: center;
-    }
-
-    .search-input {
-      font-size: 0.9rem;
-    }
-
-    form.d-flex .btn {
-      font-size: 0.9rem;
-      padding: 0.35rem 0.75rem;
-    }
-
-    #cart-badge {
-      top: 0.25rem;
-      right: 0.25rem;
-      font-size: 0.65rem;
-    }
+  #cart-badge {
+    top: 0.25rem;
+    right: 0.25rem;
+    font-size: 0.65rem;
   }
 
-  /* 🌊 Custom Navbar Background */
-  .custom-navbar {
-    background-color: #083a4f !important;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  .action-row {
+    width: 100%;
+    justify-content: center;
+    gap: 0.5rem;
+    flex-wrap: nowrap;
   }
+}
 
-  /* 🌟 Navbar Brand */
-  .navbar-brand {
-    color: #ffffff !important;
-    font-weight: 700;
-    font-size: 1.4rem;
-    letter-spacing: 0.5px;
-  }
-  .navbar-brand:hover {
-    color: #ffc107 !important;
-  }
+/* Cart Modal Title */
+#cartModal .modal-title {
+  color: var(--cart-title-color) !important;
+}
 
-  /* 🧭 Nav Links */
-  .nav-link {
-    color: #e0e0e0 !important;
-    font-weight: 500;
-    transition: color 0.2s ease, transform 0.2s ease;
-  }
-  .nav-link:hover,
-  .nav-link.active {
-    color: #ffc107 !important;
-    transform: translateY(-1px);
-  }
+/* Action row spacing */
+.action-row {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* push all items to the right */
+  gap: 1rem;                 /* space between items */
+  flex-wrap: nowrap;
+}
 
-  /* 🔍 Search Box */
+/* Make each item flex: 0 so they don't stretch */
+.action-row .nav-item {
+  flex: 0 0 auto;
+}
+
+/* On mobile (<992px), keep items centered but spaced */
+@media (max-width: 991px) {
+  .action-row {
+    justify-content: center; /* center horizontally */
+    gap: 1.2rem;             /* slightly bigger gap for mobile */
+    margin-top: 0.5rem;
+  }
+}
+.search-input {
+  min-width: 400px;  /* was 400px */
+  max-width: 650px;  /* was 700px */
+}
+
+/* Mobile (<992px) */
+@media (max-width: 991px) {
   .search-input {
-    background-color: #0b4b64;
-    color: white;
-    border: 1px solid #0b4b64;
+    min-width: 200px;  /* slightly shorter on mobile */
+    max-width: 90%;    /* fit within container nicely */
   }
-  .search-input::placeholder {
-    color: #cfd8dc;
-  }
-  .search-input:focus {
-    box-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
-    border-color: #ffc107;
+}
+/* ================= FIX SEARCH INPUT VERTICAL ALIGNMENT ================= */
+.search-row {
+  display: flex;
+  align-items: center;        /* vertical center inside its row */
+  margin-top: 4px;            /* nudge slightly down to match navbar center */
+}
+
+form.d-flex {
+  align-items: center;        /* ensure input & button vertically aligned */
+}
+
+.search-input,
+form.d-flex .btn {
+  vertical-align: middle;     /* extra safety */
+}
+/* ================= MOBILE SEARCH BUTTON ADJUSTMENT ================= */
+@media (max-width: 991px) {
+  form.d-flex {
+    flex-direction: column;      /* stack input and button vertically */
+    align-items: center;         /* center horizontally */
+    gap: 0.5rem;                 /* space between input and button */
   }
 
-  /* 🔽 Dropdown */
-  .dropdown-menu {
-    border: none;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-  }
-  .dropdown-item:hover {
-    background-color: #083a4f;
-    color: white;
+  form.d-flex .btn {
+    width: 50%;                  /* smaller width for button on mobile */
+    height: 36px;                /* keep button height same */
+    order: 2;                     /* ensure button comes after input */
   }
 
-  /* 🛒 Cart Icon */
-  .fas.fa-shopping-cart {
-    color: white;
+  .search-input {
+    width: 100%;                  /* full width on mobile */
+    max-width: 90%;
+    order: 1;                      /* input comes first */
   }
+}  
+.navbar-brand {
+  color: var(--welcome-text-color) !important;
+}
+
+/* Search button text */
+form.d-flex .btn {
+  color: var(--search-btn-text-color) !important;
+}
+.navbar-brand {
+  color: var(--logo-color) !important;
+  font-weight: 700;
+  font-size: 1.4rem;
+  letter-spacing: 0.5px;
+}
+
 </style>
 {% endblock %} {% block extra_js %}
 <script>

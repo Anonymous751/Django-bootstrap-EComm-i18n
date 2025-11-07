@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+
+{% block title %}AI Predictions / ShopEase{% endblock title %}
+
+{% block content %}
+<style>
+/* =================== LIGHT MODE VARIABLES =================== */
+:root {
+  /* Page background & text */
+  --body-bg: #f7fbff;
+  --text-color: #083a4f;
+
+  /* Prediction section */
+  --prediction-bg: linear-gradient(135deg,#f7fbff,#eaf3ff);
+
+  /* Metric cards */
+  --metric-card-bg: #ffffff;
+  --metric-card-text: #083a4f;
+  --metric-card-shadow: 0 3px 8px rgba(0,0,0,0.05);
+}
+
+/* =================== DARK MODE VARIABLES =================== */
+[data-theme="dark"] {
+  --body-bg: #0b1527; /* entire page background dark */
+  --text-color: #ffffff;
+
+  --prediction-bg: linear-gradient(135deg,#0b1527,#1a2b4f);
+  --metric-card-bg: rgba(10,15,25,0.95);
+  --metric-card-text: #ffffff;
+  --metric-card-shadow: 0 3px 8px rgba(0,0,0,0.4);
+}
+
+/* =================== APPLY VARIABLES =================== */
+body {
+  background: var(--body-bg);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+.prediction-bg {
+  background: var(--prediction-bg);
+  border-radius: 22px;
+  padding: 25px;
+  transition: background 0.3s ease;
+}
+
+.metric-card {
+  background: var(--metric-card-bg);
+  color: var(--metric-card-text);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: var(--metric-card-shadow);
+  transition: all 0.3s ease;
+}
+
+/* Optional: headings inside cards or sections follow dynamic text color */
+.metric-card h5,
+.prediction-bg h2,
+.prediction-bg h3 {
+  color: var(--metric-card-text);
+}
+
+
+</style>
+
+<div class="container-fluid mt-4">
+  <div class="row">
+
+    <!-- sidebar -->
+    <div class="col-md-3 col-lg-2 mb-4">
+      {% include 'accounts/includes/sidebar.html' %}
+    </div>
+
+    <!-- main -->
+    <div class="col-md-9 col-lg-10">
+
+      <div class="text-center mb-4">
+        <h2 class="fw-bold">AI Predictions Dashboard</h2>
+        <p class="">Machine Learning Forecasts — Next Month Performance</p>
+        <hr style="width:60%;margin:0 auto;opacity:0.3;">
+      </div>
+
+      <div class="prediction-bg">
+
+        <!-- metric row -->
+        <div class="row g-3 mb-4 text-center">
+          <div class="col-md-3">
+            <div class="metric-card">
+              <small class="">Next Month Sales</small>
+              <h4 class="m-0 text-primary fw-bold">$18,200</h4>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="metric-card">
+              <small class="  ">Total Future Users</small>
+              <h4 class="m-0 text-success fw-bold">900+</h4>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="metric-card">
+              <small class="">Conversion Rate</small>
+              <h4 class="m-0 text-warning fw-bold">11.2%</h4>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="metric-card">
+              <small class="">Revenue Growth</small>
+              <h4 class="m-0 text-danger fw-bold">+22%</h4>
+            </div>
+          </div>
+        </div>
+
+        <!-- charts -->
+        <div class="row g-4">
+          <div class="col-md-6 d-flex">
+            <div class="card shadow-sm p-3 w-100">
+              <h5 class="mb-3 fw-semibold text-primary">Predicted Sales Volume</h5>
+              <canvas id="chartFutureSales"></canvas>
+            </div>
+          </div>
+
+          <div class="col-md-6 d-flex">
+            <div class="card shadow-sm p-3 w-100">
+              <h5 class="mb-3 fw-semibold text-primary">Predicted User Growth</h5>
+              <canvas id="chartFutureUsers"></canvas>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const labels = ["Week 1","Week 2","Week 3","Week 4"];
+const predictedSales = [3000,3500,4100,4600];
+const predictedUsers = [150,200,250,300];
+
+new Chart(document.getElementById("chartFutureSales"), {
+  type: "line",
+  data: { labels, datasets: [{ label:"Sales Prediction", data: predictedSales }] }
+});
+
+new Chart(document.getElementById("chartFutureUsers"), {
+  type: "bar",
+  data: { labels, datasets: [{ label:"Users Prediction", data: predictedUsers }] }
+});
+</script>
+{% endblock %}

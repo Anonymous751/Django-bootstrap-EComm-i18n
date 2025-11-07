@@ -151,14 +151,14 @@
               {% csrf_token %}
 
               <!-- Two-Factor Authentication -->
-              <div class="bg-light rounded-3 p-3 mb-3">
+              <div class=" rounded-3 p-3 mb-3">
                 <div class="d-flex justify-content-between align-items-center">
                   <div>
                     <h6 class="fw-semibold mb-1">
                       <i class="bi bi-phone-lock me-2 text-warning"></i>
                       {% trans "Two-Factor Authentication (2FA)" %}
                     </h6>
-                    <small class="text-muted">{% trans "Add an extra layer of security to your account." %}</small>
+                    <small class="">{% trans "Add an extra layer of security to your account." %}</small>
                   </div>
 
                   {% if user.two_factor_enabled %}
@@ -174,7 +174,7 @@
               </div>
 
               <!-- Block/Unblock -->
-              <div class="bg-light rounded-3 p-3 mb-3">
+              <div class=" rounded-3 p-3 mb-3">
                 <h6 class="fw-semibold mb-2">
                   <i class="bi bi-person-x me-2 text-danger"></i> {% trans "Manage Blocked Users" %}
                 </h6>
@@ -195,9 +195,9 @@
               </div>
 
               <!-- Private Account -->
-              <div class="bg-light rounded-3 p-3">
+              <div class=" rounded-3 p-3">
                 <h6 class="fw-semibold mb-2">
-                  <i class="bi bi-eye-slash me-2 text-secondary"></i> {% trans "Privacy Settings" %}
+                  <i class="bi bi-eye-slash me-2"></i> {% trans "Privacy Settings" %}
                 </h6>
                 <div class="form-check form-switch">
                   <input class="form-check-input" type="checkbox" id="privateAccount" name="privateAccount"
@@ -215,29 +215,35 @@
           </div>
 
           <!-- ⚡ App Settings -->
-          <div class="tab-pane fade" id="app">
-            <h5 class="mb-3">{% trans "App Settings" %}</h5>
-            <form method="POST">
-              {% csrf_token %}
-              <div class="form-check form-switch mb-3">
-                <input class="form-check-input" type="checkbox" id="darkMode" {% if user.profile.dark_mode %}checked{% endif %}>
-                <label class="form-check-label" for="darkMode">{% trans "Dark Mode" %}</label>
-              </div>
-              <div class="mb-3">
-                <label class="form-label">{% trans "Dashboard Analytics" %}</label>
-                <select class="form-select">
-                  <option {% if user.profile.analytics_level == 'Basic' %}selected{% endif %}>{% trans "Basic" %}</option>
-                  <option {% if user.profile.analytics_level == 'Advanced' %}selected{% endif %}>{% trans "Advanced" %}</option>
-                  <option {% if user.profile.analytics_level == 'Professional' %}selected{% endif %}>{% trans "Professional" %}</option>
-                </select>
-              </div>
-            </form>
-            <div class="text-center mt-4">
-              <button class="btn btn-success px-4">
-                <i class="bi bi-save me-2"></i> {% trans "Save Changes" %}
-              </button>
-            </div>
-          </div>
+        <div class="tab-pane fade" id="app">
+    <h5 class="mb-3">{% trans "App Settings" %}</h5>
+
+    <form method="POST">
+        {% csrf_token %}
+
+         <div class="form-check form-switch mb-3">
+        <input class="form-check-input" type="checkbox" id="darkMode" name="dark_mode"
+               {% if user.dark_mode %}checked{% endif %}>
+        <label class="form-check-label" for="darkMode">{% trans "Dark Mode" %}</label>
+    </div>
+
+        <div class="mb-3">
+          <label class="form-label">{% trans "Dashboard Analytics" %}</label>
+          <select class="form-select" name="analytics_level">
+            <option value="Basic" {% if user.analytics_level == 'Basic' %}selected{% endif %}>{% trans "Basic" %}</option>
+            <option value="Advanced" {% if user.analytics_level == 'Advanced' %}selected{% endif %}>{% trans "Advanced" %}</option>
+            <option value="Professional" {% if user.analytics_level == 'Professional' %}selected{% endif %}>{% trans "Professional" %}</option>
+          </select>
+        </div>
+
+        <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success px-4">
+            <i class="bi bi-save me-2"></i> {% trans "Save Changes" %}
+        </button>
+    </div>
+
+    </form>
+</div>
         </div>
 
       </div>
@@ -246,26 +252,265 @@
 </div>
 {% endblock %}
 
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock  %}
+
 {% block extra_css %}
 <style>
-  .list-group-item.active {
-    background-color: #0d6efd !important;
-    color: white !important;
-    font-weight: 500;
-    border-radius: 0.5rem;
-  }
+/* =================== VARIABLES =================== */
+:root {
+  /* Body & text */
+  --body-bg: #f4f9ff;
+  --text-color: #0a3a4f;
 
-  .list-group-item.active i {
-    color: white !important;
-  }
+  --input-bg: #ffffff;
+  --input-text: #0a3a4f;
+  --input-border: #ced4da;
 
-  .nav-tabs .nav-link.active {
-    background-color: #0d6efd;
-    color: white !important;
-  }
+  /* Sidebar / Tabs */
+  --sidebar-bg: #ffffff;
+  --nav-tabs-bg: #f8f9fa;
+  --nav-link-color: #0a3a4f;
+  --active-bg: #673ab7;
+  --active-text: #ffffff;
 
-  .nav-tabs .nav-link {
-    color: #0d6efd;
-  }
+  /* Cards */
+  --card-bg: #ffffff;
+  --card-text: #0a3a4f;
+  --card-hover-bg: #f0f0f0;
+  --hover-shadow: 0 12px 20px rgba(0,0,0,0.15);
+  --card-hover-transform: translateY(-3px);
+
+  /* Buttons */
+  --btn-primary-bg: #673ab7;
+  --btn-primary-text: #ffffff;
+  --btn-warning-bg: #673ab7;
+  --btn-warning-text: #ffffff;
+  --btn-danger-bg: #673ab7;
+  --btn-danger-text: #ffffff;
+  --btn-border-radius: 0.5rem;
+
+  /* Profile Header */
+  --profile-header-gradient-start: #673ab7;
+  --profile-header-gradient-end: #9c27b0;
+  --profile-header-text: #ffffff;
+  --profile-header-icon: #ffd700;
+  --profile-header-badge-bg: #f8f9fa;
+  --profile-header-badge-text: #0a3a4f;
+
+  /* Modal */
+  --modal-heading-text: #0a3a4f;
+  --modal-x-filter: invert(0);
+
+  /* Gradient Text */
+  --gradient-text: linear-gradient(90deg, #ff6a00, #ee0979, #673ab7);
+}
+
+/* =================== DARK MODE =================== */
+[data-theme="dark"] {
+  --body-bg: #0b1527;
+  --text-color: #ffffff;
+
+  --input-bg: #1b1f36;
+  --input-text: #ffffff;
+  --input-border: #444c6b;
+
+  --sidebar-bg: #1b1f36;
+  --nav-tabs-bg: #2c3150;
+  --nav-link-color: #ffffff;
+  --active-bg: #673ab7;
+  --active-text: #ffffff;
+
+  --card-bg: #1b1f36;
+  --card-text: #ffffff;
+  --card-hover-bg: #2c3150;
+  --hover-shadow: 0 12px 20px rgba(0,0,0,0.5);
+
+  --btn-primary-bg: #673ab7;
+  --btn-primary-text: #ffffff;
+  --btn-warning-bg: #673ab7;
+  --btn-warning-text: #ffffff;
+  --btn-danger-bg: #673ab7;
+  --btn-danger-text: #ffffff;
+
+  --profile-header-gradient-start: #673ab7;
+  --profile-header-gradient-end: #9c27b0;
+  --profile-header-text: #ffffff;
+  --profile-header-icon: #ffd700;
+  --profile-header-badge-bg: #2c3150;
+  --profile-header-badge-text: #ffffff;
+
+  --modal-heading-text: #ffffff;
+  --modal-x-filter: invert(1);
+
+  --gradient-text: linear-gradient(90deg, #ff8c00, #ff1a75, #673ab7);
+}
+
+/* =================== GLOBAL =================== */
+body {
+  background-color: var(--body-bg);
+  color: var(--text-color);
+  transition: all 0.3s ease;
+}
+
+/* =================== SIDEBAR =================== */
+.sidebar {
+  background-color: var(--sidebar-bg);
+  transition: all 0.3s ease;
+}
+
+.list-group-item.active {
+  background-color: var(--active-bg) !important;
+  color: var(--active-text) !important;
+  font-weight: 500;
+  border-radius: 0.5rem;
+}
+
+.list-group-item.active i {
+  color: var(--active-text) !important;
+}
+
+/* =================== NAV TABS =================== */
+.nav-tabs {
+  background-color: var(--nav-tabs-bg) !important;
+  transition: background 0.3s ease;
+}
+
+.nav-tabs .nav-link {
+  color: var(--nav-link-color) !important;
+  transition: color 0.3s ease;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: var(--active-bg) !important;
+  color: var(--active-text) !important;
+}
+
+.nav-tabs .nav-link:hover {
+  background-color: var(--active-bg) !important;
+  color: var(--active-text) !important;
+}
+
+/* =================== CARDS =================== */
+.card,
+.dropdown-card,
+.privacy-card,
+.settings-card {
+  background-color: var(--card-bg);
+  color: var(--card-text);
+  border-radius: 16px;
+  overflow: hidden;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.card:hover,
+.dropdown-card:hover,
+.privacy-card:hover,
+.settings-card:hover {
+  transform: var(--card-hover-transform);
+  box-shadow: var(--hover-shadow);
+  background-color: var(--card-hover-bg);
+}
+
+.card-body h5,
+.card-body p,
+.dropdown-card h5,
+.dropdown-card p,
+.privacy-card h5,
+.privacy-card p,
+.settings-card h5,
+.settings-card p {
+  color: var(--card-text);
+}
+
+/* =================== INPUTS / DROPDOWNS =================== */
+input,
+select,
+textarea {
+  background-color: var(--input-bg);
+  color: var(--input-text);
+  border: 1px solid var(--input-border);
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  transition: all 0.3s ease;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--btn-primary-bg);
+}
+
+/* Dropdown options hover */
+select option:hover {
+  background-color: var(--active-bg);
+  color: var(--active-text);
+}
+
+/* =================== BUTTONS =================== */
+.btn-primary,
+.btn-warning,
+.btn-danger {
+  border-radius: var(--btn-border-radius);
+  transition: all 0.3s ease;
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  border: 1px solid var(--btn-primary-bg);
+}
+
+.btn-primary:hover,
+.btn-warning:hover,
+.btn-danger:hover {
+  background-color: var(--active-bg);
+  color: var(--active-text);
+  border-color: var(--active-bg);
+}
+
+/* =================== PROFILE HEADER =================== */
+.profile-header {
+  background: linear-gradient(135deg, var(--profile-header-gradient-start), var(--profile-header-gradient-end));
+  color: var(--profile-header-text);
+  border-radius: 0.75rem;
+  padding: 1.5rem 1.8rem;
+  box-shadow: var(--hover-shadow);
+  transition: all 0.3s ease;
+}
+
+.profile-header h2 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 0.5px;
+}
+
+.profile-header i {
+  font-size: 2rem;
+  color: var(--profile-header-icon);
+}
+
+.profile-header .badge {
+  background-color: var(--profile-header-badge-bg) !important;
+  color: var(--profile-header-badge-text) !important;
+  font-weight: 500;
+  border-radius: 0.5rem;
+}
+
+/* =================== MODAL =================== */
+.modal-title {
+  color: var(--modal-heading-text) !important;
+}
+
+.btn-close {
+  filter: var(--modal-x-filter);
+  transition: all 0.3s ease;
+}
+
 </style>
 {% endblock %}

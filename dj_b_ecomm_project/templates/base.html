@@ -1,5 +1,5 @@
   <!DOCTYPE html>
-  <html lang="en">
+<html lang="en" data-theme="{% if request.user.dark_mode %}dark{% else %}light{% endif %}">
     <head>
       {% load static %}
       <meta charset="UTF-8" />
@@ -23,9 +23,10 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
       />
+   
 
       <!-- Google Font -->
-     <link href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css2?family=Momo+Trust+Display&display=swap" rel="stylesheet">
 
       <!-- Swiper CSS -->
       <link
@@ -33,53 +34,68 @@
         href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
       />
 
+     
       <style>
-        body {
-          font-family: "Parkinsans", sans-serif;
-          background-color: #f8f9fa;
-        }
+  body {
+    font-family: "Momo Trust Display", sans-serif;
+    background-color: var(--body-bg);
+    color: var(--body-text-color);
+    transition: background 0.3s, color 0.3s;
+  }
 
-        /* Message styling */
-        .alert {
-          transition: opacity 0.6s ease, transform 0.5s ease;
-          max-width: 600px;
-          margin: 0 auto;
-        }
+  /* ===== default variables ===== */
+  :root {
+    --body-bg:#ffffff;
+    --body-text-color:#1b1b1b;
 
-        .fade-out {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
+    --card-bg:#ffffff;
+    --card-text-color:#1b1b1b;
+    --card-hover-bg:#f8f9fa;
 
-        /* Center message container */
-        .message-container {
-          position: fixed;
-          top: 90px;
-          left: 50%;
-          transform: translateX(-50%);
-          z-index: 1050;
-          width: 90%;
-          max-width: 600px;
-        }
+    --btn-warning-hover-bg:#ffc107;
+    --btn-warning-hover-text:#0a3a4f;
+    --btn-danger-hover-bg:#dc3545;
+    --btn-danger-hover-text:#ffffff;
+  }
 
-        /* Smooth fade-in */
-        .alert.show {
-          animation: fadeIn 0.4s ease;
-        }
+  /* ===== DARK MODE ===== */
+  [data-theme="dark"] {
+    --body-bg:#0b1527;
+    --body-text-color:#ffffff;
 
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(-15px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-      </style>
+    --card-bg:#1b1f36;
+    --card-text-color:#ffffff;
+    --card-hover-bg:#2c3150;
 
-      {% block extra_css %}{% endblock %}
+    --btn-warning-hover-bg:#e0a800;
+    --btn-warning-hover-text:#000000;
+    --btn-danger-hover-bg:#a71d2a;
+    --btn-danger-hover-text:#ffffff;
+  }
+
+  a { color: var(--link-color,#0d6efd) }
+
+  .card {
+    background-color: var(--card-bg);
+    color: var(--card-text-color);
+    transition:all .3s;
+  }
+  .card:hover { background-color:var(--card-hover-bg); }
+
+  .btn-outline-warning:hover {
+    background-color: var(--btn-warning-hover-bg);
+    color: var(--btn-warning-hover-text);
+    border-color: var(--btn-warning-hover-bg);
+  }
+  .btn-outline-danger:hover {
+    background-color: var(--btn-danger-hover-bg);
+    color: var(--btn-danger-hover-text);
+    border-color: var(--btn-danger-hover-bg);
+  }
+</style>
+
+
+      {% block extra_css %} {% endblock %}
     </head>
     <body>
       <!-- Navbar -->

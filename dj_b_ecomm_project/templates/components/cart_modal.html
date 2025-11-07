@@ -12,7 +12,7 @@
       class="modal-content cart-modal-glass border-0 shadow-lg rounded-4 overflow-hidden"
     >
       <!-- Header -->
-      <div class="modal-header bg-gradient-primary text-white border-0">
+      <div class="modal-header bg-gradient-primary  border-0">
         <h5 class="modal-title fw-bold" id="cartModalLabel">
           🛒 {% trans "Your Cart" %}
         </h5>
@@ -53,7 +53,7 @@
                     >
                       +
                     </button>
-                    <small class="text-muted ms-3">
+                    <small class="ms-3">
                       {% trans "Price" %}: ₹<span class="item-total fw-semibold">{{ item.total_price }}</span>
                     </small>
                   </div>
@@ -61,7 +61,7 @@
               </div>
             {% endfor %}
           {% else %}
-            <p class="text-center text-muted">{% trans "Your cart is empty!" %}</p>
+            <p class="text-center ">{% trans "Your cart is empty!" %}</p>
           {% endif %}
         </div>
 
@@ -211,45 +211,81 @@
 </script>
 
 <style>
-  /* 🌈 Beautiful gradient header */
-  .bg-gradient-primary {
-    background: linear-gradient(135deg, #0a415aff, #0a415aff);
-  }
+/* =================== LIGHT MODE VARIABLES =================== */
+:root {
+  /* Gradient header */
+  --bg-gradient-primary: linear-gradient(135deg, #0a415aff, #0a415aff);
 
-  /* 🌟 Glassmorphism modal */
-  .cart-modal-glass {
-    backdrop-filter: blur(16px);
-    background: rgba(255, 255, 255, 0.85);
-  }
+  /* Glass modal */
+  --cart-modal-bg: rgba(255, 255, 255, 0.85);
 
-  /* 🖼️ Cart item image */
-  .cart-item-img {
-    border: 2px solid rgba(78, 84, 200, 0.15);
-  }
+  /* Cart item image border */
+  --cart-item-border: rgba(78, 84, 200, 0.15);
 
-  /* ➕➖ quantity buttons */
-  .quantity-btn {
-    width: 28px;
-    height: 28px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
+  /* Checkout button gradient */
+  --btn-gradient-bg: linear-gradient(135deg, #00b09b, #96c93d);
+  --btn-gradient-hover-bg: linear-gradient(135deg, #00a88d, #8cc63f);
+  --btn-gradient-color: #ffffff;
+  --btn-gradient-hover-shadow: 0 4px 12px rgba(0, 176, 155, 0.3);
+}
 
-  /* ✨ Checkout gradient button */
-  .btn-gradient {
-    background: linear-gradient(135deg, #00b09b, #96c93d);
-    color: #fff;
-    transition: all 0.3s ease;
-    border: none;
-  }
+/* =================== DARK MODE VARIABLES =================== */
+[data-theme="dark"] {
+  --bg-gradient-primary: linear-gradient(135deg, #07425a, #0a3a4f);
+  --cart-modal-bg: rgba(10, 15, 25, 0.85);
+  --cart-item-border: rgba(200, 200, 255, 0.15);
 
-  .btn-gradient:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(135deg, #00a88d, #8cc63f);
-    box-shadow: 0 4px 12px rgba(0, 176, 155, 0.3);
-    color: #fff;
-  }
+  --btn-gradient-bg: linear-gradient(135deg, #00775f, #005f3f);
+  --btn-gradient-hover-bg: linear-gradient(135deg, #005f3f, #004f33);
+  --btn-gradient-color: #ffffff;
+  --btn-gradient-hover-shadow: 0 4px 12px rgba(0, 128, 80, 0.4);
+}
+
+/* =================== APPLY VARIABLES =================== */
+
+/* 🌈 Beautiful gradient header */
+.bg-gradient-primary {
+  background: var(--bg-gradient-primary);
+  transition: background 0.3s ease;
+}
+
+/* 🌟 Glassmorphism modal */
+.cart-modal-glass {
+  backdrop-filter: blur(16px);
+  background: var(--cart-modal-bg);
+  transition: background 0.3s ease;
+}
+
+/* 🖼️ Cart item image */
+.cart-item-img {
+  border: 2px solid var(--cart-item-border);
+  transition: border-color 0.3s ease;
+}
+
+/* ➕➖ quantity buttons */
+.quantity-btn {
+  width: 28px;
+  height: 28px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ✨ Checkout gradient button */
+.btn-gradient {
+  background: var(--btn-gradient-bg);
+  color: var(--btn-gradient-color);
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  background: var(--btn-gradient-hover-bg);
+  box-shadow: var(--btn-gradient-hover-shadow);
+  color: var(--btn-gradient-color);
+}
+
 </style>
 {% endblock %}

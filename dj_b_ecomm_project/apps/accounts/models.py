@@ -10,11 +10,33 @@ unicode_username_validator = RegexValidator(
 
 
 class CustomUser(AbstractUser):
+    ROLE_CHOICES = (
+        ('Basic', 'Basic'),
+        ('Advanced', 'Advanced'),
+        ('Professional', 'Professional'),
+        ('Admin', 'Admin'),
+    )
+
+    role = models.CharField(
+        max_length=20,
+        choices=ROLE_CHOICES,
+        default='basic'
+    )
+
     username = models.CharField(
         max_length=150,
         unique=True,
         validators=[unicode_username_validator],
     )
+    analytics_level = models.CharField(
+    max_length=20,
+    default="Basic",
+    choices=[
+        ("Basic", "Basic"),
+        ("Advanced", "Advanced"),
+        ("Professional", "Professional"),
+    ]
+)
     display_name = models.CharField(max_length=150, blank=True, null=True)
     profile_image = models.ImageField(upload_to='profile_images/', blank=True, null=True)
     is_private = models.BooleanField(default=False)
@@ -25,6 +47,11 @@ class CustomUser(AbstractUser):
     location = models.CharField(max_length=100, blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     otp_code = models.CharField(max_length=6, blank=True, null=True)
+    
+    def save(self, *args, **kwargs):
+        if self.role in ["Basic", "Advanced", "Professional"]:
+            self.analytics_level = self.role
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = "User"
@@ -51,3 +78,19 @@ class Block(models.Model):
 
     def __str__(self):
         return f"{self.blocker} blocked {self.blocked}"
+
+from django.utils.translation import gettext_lazy as _
+
+from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+class Profile(models.Model):
+    ROLE_CHOICES = [
+        ("admin", _("Superuser")),
+        ("staff", _("Staff")),
+        ("active", _("Active User")),
+    ]
+
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE)
+    display_name = models.CharField(max_length=100, blank=True, null=True)
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES)

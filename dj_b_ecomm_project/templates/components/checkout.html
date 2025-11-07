@@ -45,7 +45,7 @@
           </table>
         </div>
 
-        <div class="p-4 text-end bg-light">
+        <div class="p-4 text-end card-footer">
           <a href="{% url 'place_order' %}" class="btn btn-gradient btn-lg rounded-pill px-4 py-2">
             <i class="bi bi-check-circle me-2"></i>{% trans "Place Order" %}
           </a>
@@ -63,61 +63,166 @@
 </div>
 {% endblock %}
 
+
 {% block extra_css %}
-<!-- Custom Styles -->
 <style>
-  /* 🎨 Gradient title text */
-  .text-gradient {
-    background: linear-gradient(135deg, #0a415aff, #0a415aff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
+/* =================== VARIABLES =================== */
+:root {
+  --body-bg: #f4f9ff;
+  --gradient-text-start: #0a415aff;
+  --gradient-text-end: #0a415aff;
 
-  /* 💎 Card styling */
-  .card {
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(10px);
-  }
+  --card-bg: rgba(255, 255, 255, 0.92);
+  --card-backdrop: blur(10px);
 
-  /* 🌈 Gradient table header */
-  .table-gradient {
-    background: linear-gradient(135deg, #0a415aff, #0a415aff);
-    border: none;
-  }
+  --table-bg: #ffffff;
+  --table-header-bg-start: #0a415aff;
+  --table-header-bg-end: #0a415aff;
+  --table-row-bg: #ffffff;
+  --table-row-hover-bg: rgba(143, 148, 251, 0.1);
+  --table-text-color: #0a3a4f;
 
-  /* 🪶 Smooth hover on rows */
-  .cart-row {
-    transition: all 0.2s ease-in-out;
-  }
+  --btn-gradient-start: #00b09b;
+  --btn-gradient-end: #96c93d;
+  --btn-gradient-hover-start: #00a88d;
+  --btn-gradient-hover-end: #8cc63f;
+  --btn-gradient-text: #ffffff;
+  --btn-gradient-hover-shadow: 0 4px 12px rgba(0, 176, 155, 0.3);
+}
 
-  .cart-row:hover {
-    background-color: rgba(143, 148, 251, 0.1);
-    transform: scale(1.01);
-  }
+[data-theme="dark"] {
+  --body-bg: #0b1527;
+  --gradient-text-start: #74ebd5;
+  --gradient-text-end: #8aa4ff;
 
-  /* ✨ Gradient button */
-  .btn-gradient {
-    background: linear-gradient(135deg, #00b09b, #96c93d);
-    color: #fff;
-    border: none;
-    transition: all 0.3s ease;
-  }
+  --card-bg: #0d111f;
+  --card-backdrop: blur(8px);
 
-  .btn-gradient:hover {
-    transform: translateY(-2px);
-    background: linear-gradient(135deg, #00a88d, #8cc63f);
-    box-shadow: 0 4px 12px rgba(0, 176, 155, 0.3);
-    color: #fff;
-  }
+  --table-bg: #0d111f;
+  --table-header-bg-start: #11131f;
+  --table-header-bg-end: #1a1c2e;
+  --table-row-bg: #0d111f;
+  --table-row-hover-bg: rgba(255, 255, 255, 0.05);
+  --table-text-color: #ffffff;
 
-  /* 🧾 Table style cleanup */
-  table.table {
-    border-collapse: separate;
-    border-spacing: 0;
-  }
+  --btn-gradient-start: #005f3f;
+  --btn-gradient-end: #00875f;
+  --btn-gradient-hover-start: #004f33;
+  --btn-gradient-hover-end: #006644;
+  --btn-gradient-text: #ffffff;
+  --btn-gradient-hover-shadow: 0 4px 12px rgba(0, 128, 80, 0.3);
+}
 
-  table td, table th {
-    vertical-align: middle !important;
-  }
+/* =================== BODY =================== */
+body, html {
+  background-color: var(--body-bg);
+  color: var(--table-text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+}
+
+/* =================== GRADIENT TEXT =================== */
+.text-gradient {
+  background: linear-gradient(135deg, var(--gradient-text-start), var(--gradient-text-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =================== CARD =================== */
+.card {
+  background: var(--card-bg);
+  backdrop-filter: var(--card-backdrop);
+  transition: all 0.3s ease;
+  color: var(--table-text-color);
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+/* =================== TABLE =================== */
+table.table {
+  background-color: var(--table-bg);
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  color: var(--table-text-color);
+  transition: background 0.3s ease, color 0.3s ease;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.table-gradient thead {
+  background: linear-gradient(135deg, var(--table-header-bg-start), var(--table-header-bg-end));
+  color: var(--table-text-color);
+}
+
+table tbody tr {
+  background-color: var(--table-row-bg);
+  transition: all 0.2s ease-in-out;
+}
+
+table tbody tr:hover {
+  background-color: var(--table-row-hover-bg);
+  transform: scale(1.01);
+}
+
+/* =================== TABLE CELLS =================== */
+table td, table th {
+  vertical-align: middle !important;
+  border-color: rgba(255, 255, 255, 0.1);
+  padding: 0.75rem 1rem;
+  color: var(--table-text-color);
+}
+
+/* =================== BUTTON =================== */
+.btn-gradient {
+  background: linear-gradient(135deg, var(--btn-gradient-start), var(--btn-gradient-end));
+  color: var(--btn-gradient-text);
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn-gradient:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, var(--btn-gradient-hover-start), var(--btn-gradient-hover-end));
+  box-shadow: var(--btn-gradient-hover-shadow);
+  color: var(--btn-gradient-text);
+}
+
+.card-footer {
+  background-color: var(--table-row-bg); /* same as table rows */
+  transition: background 0.3s ease, color 0.3s ease;
+  color: var(--table-text-color);
+}
+
+/* =================== TABLE =================== */
+.table-gradient thead {
+  background: linear-gradient(135deg, var(--table-header-bg-start), var(--table-header-bg-end));
+  color: var(--table-text-color) !important;
+}
+
+table.table,
+table tbody tr,
+table td,
+table th {
+  background-color: var(--table-row-bg) !important;
+  color: var(--table-text-color) !important;
+}
+
+table tbody tr:hover {
+  background-color: var(--table-row-hover-bg) !important;
+}
+
+/* =================== BADGE =================== */
+.badge.bg-secondary {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: var(--table-text-color);
+}
+
+[data-theme="dark"] .badge.bg-secondary {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
 </style>
 {% endblock %}

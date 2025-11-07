@@ -5,25 +5,50 @@
 
 {% block extra_css %}
 <style>
+/* =================== ABOUT SECTION VARIABLES =================== */
+:root {
+  --about-bg: #f9f9f9;
+  --about-text: #555;
+  --about-heading: #1b1b1b;
+  --about-font-family: "Poppins", sans-serif;
+  --about-padding: 80px 0;
+  --about-max-width: 700px;
+  --about-heading-size: 2.8rem;
+  --about-paragraph-size: 1.1rem;
+  --about-line-height: 1.8;
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] {
+  --about-bg: #0b1527;
+  --about-text: #cfd8dc;
+  --about-heading: #e9eef7;
+}
+
+/* =================== ABOUT SECTION STYLES =================== */
 .about-section {
-  padding: 80px 0;
-  background-color: #f9f9f9;
+  padding: var(--about-padding);
+  background-color: var(--about-bg);
   text-align: center;
+
+  transition: background 0.3s, color 0.3s;
 }
 
 .about-section h1 {
-  font-size: 2.8rem;
+  font-size: var(--about-heading-size);
   font-weight: 700;
   margin-bottom: 20px;
+  color: var(--about-heading);
 }
 
 .about-section p {
-  max-width: 700px;
+  max-width: var(--about-max-width);
   margin: 0 auto;
-  font-size: 1.1rem;
-  color: #555;
-  line-height: 1.8;
+  font-size: var(--about-paragraph-size);
+  color: var(--about-text);
+  line-height: var(--about-line-height);
 }
+
 </style>
 {% endblock %}
 
